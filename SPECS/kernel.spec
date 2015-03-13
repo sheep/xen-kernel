@@ -1,7 +1,7 @@
 %global __spec_install_pre %{___build_pre}
 
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.10.55
+%define LKAver 3.10.63
 
 # Define the buildid, if required.
 #define buildid .1
@@ -685,6 +685,13 @@ then
     /sbin/ldconfig -X || exit $?
 fi
 
+#added tp auto-install xen kernel in grub
+%ifarch x86_64
+if [ -e /etc/sysconfig/xen-kernel ] && [ -e /usr/bin/grub-bootxen.sh ] ; then
+    kver="%{version}-%{release}.%{_target_cpu}" /usr/bin/grub-bootxen.sh
+fi
+%endif
+
 %post
 if [ `uname -i` == "i386" ] && [ -f /etc/sysconfig/kernel ]; then
     /bin/sed -r -i -e 's/^DEFAULTKERNEL=kernel-NONPAE$/DEFAULTKERNEL=kernel/' /etc/sysconfig/kernel || exit $?
@@ -863,7 +870,14 @@ fi
 %endif
 
 %changelog
-* Fri Sep 24 2014 Johnny Hughes <johnny@centos.org> - 3.10.55-11
+* Tue Jan  6 2015 Johnny Hughes <johnny@centos.org> - 3.10.53-11
+- Upgrade to upstream 3.10.63
+
+* Thu Oct  9 2014 Johnny Hughes <johnny@centos.org> - 3.10.56-11
+- upgraded to upstream 3.10.56
+- added a grub-bootxen.sh to posttrans to autoinstall xen kernel
+
+* Fri Sep 26 2014 Johnny Hughes <johnny@centos.org> - 3.10.55-11
 - upgraded to upstream 3.10.55
 
 * Mon Jun 16 2014 Johnny Hughes <johnny@centos.org> - 3.10.43-11
