@@ -1,0 +1,29 @@
+diff -uNrp drivers/block/Kconfig drivers/block/Kconfig
+--- drivers/block/Kconfig	2013-09-14 08:55:12.000000000 -0500
++++ drivers/block/Kconfig	2013-11-12 10:48:14.700766754 -0600
+@@ -541,4 +541,16 @@ config BLK_DEV_RSXX
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called rsxx.
+ 
++config XEN_BLKDEV_TAP
++       tristate "Block-device tap backend driver"
++       depends on XEN_BACKEND
++       default XEN_BACKEND
++       help
++         The block tap driver is an alternative to the block back driver
++         and allows VM block requests to be redirected to userspace through
++         a device interface.  The tap allows user-space development of
++         high-performance block backends, where disk images may be implemented
++         as files, in memory, or on other hosts across the network.  This
++         driver can safely coexist with the existing blockback driver.
++
+ endif # BLK_DEV
+diff -uNrp drivers/block/Makefile drivers/block/Makefile
+--- drivers/block/Makefile	2013-09-14 08:55:12.000000000 -0500
++++ drivers/block/Makefile	2013-11-12 10:49:23.385550177 -0600
+@@ -44,3 +44,5 @@ obj-$(CONFIG_BLK_DEV_RSXX) += rsxx/
+ 
+ nvme-y		:= nvme-core.o nvme-scsi.o
+ swim_mod-y	:= swim.o swim_asm.o
++
++obj-$(CONFIG_XEN_BLKDEV_TAP) += blktap/
