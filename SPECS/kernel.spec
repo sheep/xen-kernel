@@ -125,7 +125,7 @@ License: GPLv2
 URL: http://www.kernel.org/
 Version: %{pkg_version}
 Release: %{pkg_release}
-ExclusiveArch: noarch i386 i686 x86_64
+ExclusiveArch: noarch x86_64
 ExclusiveOS: Linux
 Provides: kernel = %{version}-%{release}
 Provides: kernel-%{_target_cpu} = %{version}-%{release}
