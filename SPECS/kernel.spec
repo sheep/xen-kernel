@@ -1,7 +1,7 @@
 %global __spec_install_pre %{___build_pre}
 
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.10.63
+%define LKAver 3.18.12
 
 # Define the buildid, if required.
 #define buildid .1
@@ -157,7 +157,7 @@ BuildRequires: gcc >= 3.4.2, binutils >= 2.12, redhat-rpm-config
 BuildRequires: net-tools, patchutils, rpm-build >= 4.8.0-7
 BuildRequires: xmlto, asciidoc, bc
 %if %{with_perf}
-BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel
+BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel, numactl-devel
 BuildRequires: python-devel perl(ExtUtils::Embed) gtk2-devel bison 
 %endif
 BuildRequires: python
@@ -167,52 +167,18 @@ BuildConflicts: rhbuildsys(DiskFree) < 7Gb
 # Sources.
 Source0: ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
-# Source2: config-i686-NONPAE
 Source3: config-x86_64
-# Source4: bnx2-mips-09-6.2.1b.fw
-# Source5: bnx2-mips-06-6.2.3.fw
-# Source6: bnx2x-e2-7.2.16.0.fw
-# Source7: bnx2x-e1h-7.2.51.0.fw
 Source8: 3.10.20-bnx2-firmware.tgz
 Source9: 3.10.20-bnx2x-firmware.tgz
 
 #Patches
 
 #xen patches
-#Patch100:  3.4.24-xen-p2m-move-code.patch
-#Patch101:  3.4.24-xen-p2m-call-reserve_brk.patch
-#Patch102:  3.4.24-xen-p2m-collapse-early_alloc_p2m_middle-redundant-checks.patch 
-#Patch103:  3.4.24-xen-p2m-early-set_phys_to_machine.patch
-#Patch104:  3.4.24-xen-setup-freeing-pfn.patch
-#Patch105:  3.4.24-xen-setup-populate-E820.patch
-#Patch106:  3.4.24-xen-setup-combine2-hypercall-functions.patch
-#Patch107:  3.4.24-xen-setup-update-VA-mapping.patch
-#Patch108:  3.4.24-xen-p2m-reserve-space-P2M.patch
-#Patch109:  3.4.24-xen-mm-direct-call-xen_set_pte.patch
-#Patch110:  3.4.24-xen-mm-zero-PTEs.patch
-#Patch111:  3.4.24-xen-x86-add-desc_equal.patch
-#Patch112:  3.4.24-xen-x86-avoid-updating-TLS.patch
-#Patch113:  3.4.24-xen-mm-more-precise-error-xen_remap_domain_range.patch
-#Patch114:  3.4.24-xen-privcmd-add-PRIVCMD_MMAPBATCH_V2.patch
-#Patch115:  3.4.24-xen-privcmd-fix-mmap-batch-error.patch
-#Patch116:  3.4.24-xen-privcmd-return-EFAULT-on-error.patch
-#Patch117:  3.4.24-xen-privcmd-success-from-IOCTL_PRIVCMD_MMAPBATCH.patch
-Patch118:  3.10.12-xen-block-blktap-dkms.patch
-Patch119:  3.10.12-xen-blktap-config.patch
-#Patch120:  3.4.26-xen-failsafe-callback-CVE-0190.patch
-#Patch121:  3.4.26-xen-privcmd-batch-ioctl.patch
-#Patch122:  3.4.28-xen-ballon-subtract-released-pages.patch
-#Patch123:  3.4.42-xen-netfront-remove-unused-var-extra.patch
-#Patch124:  3.4.42-xen-netfront-frags-slots-xennet_get_responses.patch
-#Patch125:  3.4.42-xen-netback-remove-skb-xen_netbk_alloc_page.patch
-#Patch126:  3.4.42-xen-netfront-frags-slots-log-msg.patch
-#Patch127:  3.4.42-xen-netfront-reduce-gso_max_size-tcp-header.patch
-#Patch128:  3.4.42-xen-netback-coalesce-TX-fix-regressions.patch
-#Patch129:  3.4.42-xen-netback-no-disconnect-oversize-packet.patch
+Patch118:  3.18.12-xen-block-blktap-dkms.patch
+Patch119:  3.18.12-xen-blktap-config.patch
+Patch120:  3.18.12-xen-blktap-makefile.patch
+
 Patch130:  3.4.46-bnx2-missing-09-6.2.1b.fw.patch
-#Patch131:  3.4.54-xen-event-chan-avoid-deadlock-unbind.patch
-#Patch132:  3.4.54-xen-x86-1to1-ISA-map.patch
-#Patch133:  3.4.60-wait.h-backout.patch 
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -283,7 +249,7 @@ This package provides documentation files from the kernel sources.
 Various bits of information about the Linux kernel and the device
 drivers shipped with it are documented in these files.
 
-You'll want to install this package if you need a reference to the
+You\'ll want to install this package if you need a reference to the
 options that can be passed to the kernel modules at load time.
 %endif
 
@@ -353,40 +319,11 @@ for fwfile in $(ls *.fw)
 popd > /dev/null
 
 #roll in patches
-#%patch100 -p0
-#%patch101 -p0
-#%patch102 -p0
-#%patch103 -p0
-#%patch104 -p0
-#%patch105 -p0
-#%patch106 -p0
-#%patch107 -p0
-#%patch108 -p0
-#%patch109 -p0
-#%patch110 -p0
-#%patch111 -p0
-#%patch112 -p0
-#%patch113 -p0
-#%patch114 -p0
-#%patch115 -p0
-#%patch116 -p0
-#%patch117 -p0
 %patch118 -p0
 %patch119 -p0
-# %patch120 -p0
-#%patch121 -p0
-#%patch122 -p0
-#%patch123 -p0
-#%patch124 -p0
-# %patch125 -p0
-#%patch126 -p0
-#%patch127 -p0
-#%patch128 -p0
-#%patch129 -p0
+%patch120 -p0
+
 %patch130 -p0
-#%patch131 -p0
-#%patch132 -p0
-#%patch133 -p0
 
 popd > /dev/null
 
@@ -864,13 +801,25 @@ fi
 %defattr(-,root,root)
 /etc/bash_completion.d/perf
 %{_bindir}/perf
+%{_bindir}/trace
+%{_libdir}/libperf-gtk.so
+%dir %{_libdir}/traceevent/plugins
+%{_libdir}/traceevent/plugins/*
 %dir %{_libexecdir}/perf-core
 %{_libexecdir}/perf-core/*
 %{_mandir}/man[1-8]/*
 %endif
 
 %changelog
-* Tue Jan  6 2015 Johnny Hughes <johnny@centos.org> - 3.10.53-11
+* Tue May  5 2015 Johnny Hughes <johnny@centos.org> - 3.18.12-11
+- Rebase on LTS kernel 3.18.12
+- Modify patch 118, 119, 120 to work with 3.18.12
+
+* Fri Feb  6 2015 Johnny Hughes <johnny@centos.org> - 3.10.68-11
+- Upgrade to upstream 3.10.68
+- Addresses CVE-2014-8134, CVE-2014-8989, CVE-2014-9529
+
+* Tue Jan  6 2015 Johnny Hughes <johnny@centos.org> - 3.10.63-11
 - Upgrade to upstream 3.10.63
 
 * Thu Oct  9 2014 Johnny Hughes <johnny@centos.org> - 3.10.56-11

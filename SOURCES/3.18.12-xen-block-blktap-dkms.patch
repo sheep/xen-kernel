@@ -1979,7 +1979,7 @@ index 0000000..cef1fe9
 +	unsigned int nsecs;
 +
 +	breq->u.tr.nr_sectors    = nsecs = bio_sectors(bio);
-+	breq->u.tr.sector_number = bio->bi_sector;
++	breq->u.tr.sector_number = bio->bi_iter.bi_sector;
 +
 +	return nsecs;
 +}
