@@ -1,7 +1,14 @@
 %global __spec_install_pre %{___build_pre}
 
+# Define ksbindir of /sbin or /usr/sbin/ based on rhel6 or rhel7
+%if "%{rhel}" == "6"
+%define ksbindir /sbin
+%else
+%define ksbindir /usr/sbin
+%endif
+ 
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.12
+%define LKAver 3.18.17
 
 # Define the buildid, if required.
 #define buildid .1
@@ -84,7 +91,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 12%{?buildid}%{?dist}
+%define pkg_release 13%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -125,7 +132,7 @@ License: GPLv2
 URL: http://www.kernel.org/
 Version: %{pkg_version}
 Release: %{pkg_release}
-ExclusiveArch: noarch x86_64
+ExclusiveArch: noarch i686 x86_64
 ExclusiveOS: Linux
 Provides: kernel = %{version}-%{release}
 Provides: kernel-%{_target_cpu} = %{version}-%{release}
@@ -137,8 +144,8 @@ Provides: kernel-uname-r = %{version}-%{release}.%{_target_cpu}
 Requires: kernel-firmware >= %{version}-%{release}
 Requires(pre): %{kernel_prereq}
 Requires(pre): %{initrd_prereq}
-Requires(post): %{_sbindir}/new-kernel-pkg
-Requires(preun): %{_sbindir}/new-kernel-pkg
+Requires(post): %{ksbindir}/new-kernel-pkg
+Requires(preun): %{ksbindir}/new-kernel-pkg
 Conflicts: %{kernel_dot_org_conflicts}
 Conflicts: %{package_conflicts}
 Conflicts: %{kernel_headers_conflicts}
@@ -168,8 +175,8 @@ BuildConflicts: rhbuildsys(DiskFree) < 7Gb
 Source0: ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
 Source3: config-x86_64
-Source8: 3.10.20-bnx2-firmware.tgz
-Source9: 3.10.20-bnx2x-firmware.tgz
+Source8: 3.18.17-bnx2-firmware.tgz
+Source9: 3.18.17-bnx2x-firmware.tgz
 
 #Patches
 
@@ -178,7 +185,7 @@ Patch118:  3.18.12-xen-block-blktap-dkms.patch
 Patch119:  3.18.12-xen-blktap-config.patch
 Patch120:  3.18.12-xen-blktap-makefile.patch
 
-Patch130:  3.4.46-bnx2-missing-09-6.2.1b.fw.patch
+Patch130:  3.18.17-bnx2-missing-09-6.2.1b.fw.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -211,8 +218,8 @@ Provides: kernel-modeset = 1
 Provides: kernel-uname-r = %{version}-%{release}.%{_target_cpu}
 Requires(pre): %{kernel_prereq}
 Requires(pre): %{initrd_prereq}
-Requires(post): %{_sbindir}/new-kernel-pkg
-Requires(preun): %{_sbindir}/new-kernel-pkg
+Requires(post): %{ksbindir}/new-kernel-pkg
+Requires(preun): %{ksbindir}/new-kernel-pkg
 Conflicts: %{kernel_dot_org_conflicts}
 Conflicts: %{package_conflicts}
 Conflicts: %{kernel_headers_conflicts}
@@ -491,7 +498,7 @@ hwcap 1 nosegneg"
     while read i
     do
         echo -n "${i#$RPM_BUILD_ROOT/lib/modules/%{KVRFA}/} " >> modinfo
-        %{_sbindir}/modinfo -l $i >> modinfo
+        %{ksbindir}/modinfo -l $i >> modinfo
     done < modnames
 
     egrep -v 'GPL( v2)?$|Dual BSD/GPL$|Dual MPL/GPL$|GPL and additional rights$' modinfo && exit 1
@@ -604,22 +611,22 @@ popd > /dev/null
 %if %{with_std}
 %posttrans
 NEWKERNARGS=""
-(%{_sbinder}/grubby --info=`%{_sbindir}/grubby --default-kernel`) 2>/dev/null | grep -q crashkernel
+(%{ksbindir}/grubby --info=`%{ksbindir}/grubby --default-kernel`) 2>/dev/null | grep -q crashkernel
 if [ $? -ne 0 ]; then
         NEWKERNARGS="--kernel-args=\"crashkernel=auto\""
 fi
 %if %{with_dracut}
-%{_sbindir}/new-kernel-pkg --package kernel --mkinitrd --dracut --depmod --update %{version}-%{release}.%{_target_cpu} $NEWKERNARGS || exit $?
+%{ksbindir}/new-kernel-pkg --package kernel --mkinitrd --dracut --depmod --update %{version}-%{release}.%{_target_cpu} $NEWKERNARGS || exit $?
 %else
-%{_sbindir}/new-kernel-pkg --package kernel --mkinitrd --depmod --update %{version}-%{release}.%{_target_cpu} $NEWKERNARGS || exit $?
+%{ksbindir}/new-kernel-pkg --package kernel --mkinitrd --depmod --update %{version}-%{release}.%{_target_cpu} $NEWKERNARGS || exit $?
 %endif
-%{_sbindir}/new-kernel-pkg --package kernel --rpmposttrans %{version}-%{release}.%{_target_cpu} || exit $?
-if [ -x %{_sbindir}/weak-modules ]; then
-    %{_sbindir}/weak-modules --add-kernel %{version}-%{release}.%{_target_cpu} || exit $?
+%{ksbindir}/new-kernel-pkg --package kernel --rpmposttrans %{version}-%{release}.%{_target_cpu} || exit $?
+if [ -x %{ksbindir}/weak-modules ]; then
+    %{ksbindir}/weak-modules --add-kernel %{version}-%{release}.%{_target_cpu} || exit $?
 fi
-if [ -x %{_sbindir}/ldconfig ]
+if [ -x %{ksbindir}/ldconfig ]
 then
-    %{_sbindir}/ldconfig -X || exit $?
+    %{ksbindir}/ldconfig -X || exit $?
 fi
 
 #added tp auto-install xen kernel in grub
@@ -636,16 +643,16 @@ fi
 if grep --silent '^hwcap 0 nosegneg$' /etc/ld.so.conf.d/kernel-*.conf 2> /dev/null; then
     /bin/sed -i '/^hwcap 0 nosegneg$/ s/0/1/' /etc/ld.so.conf.d/kernel-*.conf
 fi
-%{_sbindir}/new-kernel-pkg --package kernel --install %{version}-%{release}.%{_target_cpu} || exit $?
+%{ksbindir}/new-kernel-pkg --package kernel --install %{version}-%{release}.%{_target_cpu} || exit $?
 
 %preun
-%{_sbindir}/new-kernel-pkg --rminitrd --rmmoddep --remove %{version}-%{release}.%{_target_cpu} || exit $?
-if [ -x %{_sbindir}/weak-modules ]; then
-    %{_sbindir}/weak-modules --remove-kernel %{version}-%{release}.%{_target_cpu} || exit $?
+%{ksbindir}/new-kernel-pkg --rminitrd --rmmoddep --remove %{version}-%{release}.%{_target_cpu} || exit $?
+if [ -x %{ksbindir}/weak-modules ]; then
+    %{ksbindir}/weak-modules --remove-kernel %{version}-%{release}.%{_target_cpu} || exit $?
 fi
-if [ -x %{_sbindir}/ldconfig ]
+if [ -x %{ksbindir}/ldconfig ]
 then
-    %{_sbindir}/ldconfig -X || exit $?
+    %{ksbindir}/ldconfig -X || exit $?
 fi
 
 %post devel
@@ -664,38 +671,38 @@ fi
 %if %{with_nonpae}
 %posttrans NONPAE
 NEWKERNARGS=""
-(%{_sbindir}/grubby --info=`%{_sbindir}/grubby --default-kernel`) 2> /dev/null | grep -q crashkernel
+(%{ksbindir}/grubby --info=`%{ksbindir}/grubby --default-kernel`) 2> /dev/null | grep -q crashkernel
 if [ $? -ne 0 ]; then
     NEWKERNARGS="--kernel-args=\"crashkernel=auto\""
 fi
 %if %{with_dracut}
-%{_sbindir}/new-kernel-pkg --package kernel-NONPAE --mkinitrd --dracut --depmod --update %{version}-%{release}NONPAE.%{_target_cpu} $NEWKERNARGS || exit $?
+%{ksbindir}/new-kernel-pkg --package kernel-NONPAE --mkinitrd --dracut --depmod --update %{version}-%{release}NONPAE.%{_target_cpu} $NEWKERNARGS || exit $?
 %else
-%{_sbindir}/new-kernel-pkg --package kernel-NONPAE --mkinitrd --depmod --update %{version}-%{release}NONPAE.%{_target_cpu} $NEWKERNARGS || exit $?
+%{ksbindir}/new-kernel-pkg --package kernel-NONPAE --mkinitrd --depmod --update %{version}-%{release}NONPAE.%{_target_cpu} $NEWKERNARGS || exit $?
 %endif
-%{_sbindir}/new-kernel-pkg --package kernel-NONPAE --rpmposttrans %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
-if [ -x %{_sbindir}/weak-modules ]; then
-    %{_sbindir}/weak-modules --add-kernel %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
+%{ksbindir}/new-kernel-pkg --package kernel-NONPAE --rpmposttrans %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
+if [ -x %{ksbindir}/weak-modules ]; then
+    %{ksbindir}/weak-modules --add-kernel %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
 fi
-if [ -x %{_sbindir}/ldconfig ]
+if [ -x %{ksbindir}/ldconfig ]
 then
-    %{_sbindir}/ldconfig -X || exit $?
+    %{ksbindir}/ldconfig -X || exit $?
 fi
 
 %post NONPAE
 if [ `uname -i` == "i386" ] && [ -f /etc/sysconfig/kernel ]; then
     /bin/sed -r -i -e 's/^DEFAULTKERNEL=kernel$/DEFAULTKERNEL=kernel-NONPAE/' /etc/sysconfig/kernel || exit $?
 fi
-%{_sbindir}/new-kernel-pkg --package kernel-NONPAE --install %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
+%{ksbindir}/new-kernel-pkg --package kernel-NONPAE --install %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
 
 %preun NONPAE
-%{_sbindir}/new-kernel-pkg --rminitrd --rmmoddep --remove %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
-if [ -x %{_sbindir}/weak-modules ]; then
-    %{_sbindir}/weak-modules --remove-kernel %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
+%{ksbindir}/new-kernel-pkg --rminitrd --rmmoddep --remove %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
+if [ -x %{ksbindir}/weak-modules ]; then
+    %{ksbindir}/weak-modules --remove-kernel %{version}-%{release}NONPAE.%{_target_cpu} || exit $?
 fi
-if [ -x %{_sbindir}/ldconfig ]
+if [ -x %{ksbindir}/ldconfig ]
 then
-    %{_sbindir/}ldconfig -X || exit $?
+    %{ksbindir}/ldconfig -X || exit $?
 fi
 
 %post NONPAE-devel
@@ -811,8 +818,13 @@ fi
 %endif
 
 %changelog
+* Mon Jul  6 2015 Johnny Hughes <johnny@centos.org> - 3.18.17-13
+- uprgade to upstream 3.18.17
+- modified config-i686 and config-x86_64 to add new devices
+- modified bn2x and bnx2x firmware to latest
+ 
 * Tue Jun  9 2015 George Dunlap <george.dunlap@eu.citrix.com> - 3.18.12-12
-- Replace /sbin with %{_sbindir} for C7 compatibility
+- Replace /sbin with %{ksbindir} for C7 compatibility
 
 * Tue May  5 2015 Johnny Hughes <johnny@centos.org> - 3.18.12-11
 - Rebase on LTS kernel 3.18.12
