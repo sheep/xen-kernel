@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.17
+%define LKAver 3.18.21
 
 # Define the buildid, if required.
 #define buildid .1
@@ -57,7 +57,6 @@
 %ifarch i686
 %define with_nonpae 0
 %define with_doc 0
-%define with_headers 0
 %define with_firmware 0
 %endif
 
@@ -818,6 +817,9 @@ fi
 %endif
 
 %changelog
+* Wed Sep 23 2015 Johnny Hughes <johnny@centos.org> - 3.18.21-13
+- upgrade to upstream 3.18.21
+
 * Mon Jul  6 2015 Johnny Hughes <johnny@centos.org> - 3.18.17-13
 - uprgade to upstream 3.18.17
 - modified config-i686 and config-x86_64 to add new devices
