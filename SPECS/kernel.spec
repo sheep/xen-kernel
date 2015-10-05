@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.17
+%define LKAver 3.18.21
 
 # Define the buildid, if required.
 #define buildid .1
@@ -41,6 +41,9 @@
 %define with_headers 0
 %define with_perf 0
 %define with_vdso_install 0
+%if "%{rhel}" == "7"
+%define with_firmware 0
+%endif
 %endif
 
 # Build only the 32-bit kernel-headers package.
@@ -57,7 +60,6 @@
 %ifarch i686
 %define with_nonpae 0
 %define with_doc 0
-%define with_headers 0
 %define with_firmware 0
 %endif
 
@@ -91,7 +93,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 13%{?buildid}%{?dist}
+%define pkg_release 16%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -141,7 +143,11 @@ Provides: kernel-drm-nouveau = 16
 Provides: kernel-modeset = 1
 Provides: kernel-xen = %{version}-%{release}.%{_target_cpu}
 Provides: kernel-uname-r = %{version}-%{release}.%{_target_cpu}
+%if "%{rhel}" == "7"
+Requires: linux-firmware >=  20140911
+%else
 Requires: kernel-firmware >= %{version}-%{release}
+%endif
 Requires(pre): %{kernel_prereq}
 Requires(pre): %{initrd_prereq}
 Requires(post): %{ksbindir}/new-kernel-pkg
@@ -818,6 +824,12 @@ fi
 %endif
 
 %changelog
+* Fri Sep 25 2015 Johnny Hughes <johnny@centos.org> - 3.18.21-16
+- use linux-firmware from centos-7 kernel
+
+* Wed Sep 23 2015 Johnny Hughes <johnny@centos.org> - 3.18.21-13
+- upgrade to upstream 3.18.21
+
 * Mon Jul  6 2015 Johnny Hughes <johnny@centos.org> - 3.18.17-13
 - uprgade to upstream 3.18.17
 - modified config-i686 and config-x86_64 to add new devices
