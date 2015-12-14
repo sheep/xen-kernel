@@ -93,7 +93,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 16%{?buildid}%{?dist}
+%define pkg_release 17%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -192,6 +192,22 @@ Patch119:  3.18.12-xen-blktap-config.patch
 Patch120:  3.18.12-xen-blktap-makefile.patch
 
 Patch130:  3.18.17-bnx2-missing-09-6.2.1b.fw.patch
+
+#XSA155 allowed for public cloud operators
+Patch140: xsa155-linux-xsa155-0001-xen-Add-RING_COPY_REQUEST.patch
+Patch141: xsa155-linux-xsa155-0002-xen-netback-don-t-use-last-request-to-determine-mini.patch
+Patch142: xsa155-linux-xsa155-0003-xen-netback-use-RING_COPY_REQUEST-throughout.patch
+Patch143: xsa155-linux-xsa155-0004-xen-blkback-only-read-request-operation-from-shared-.patch
+Patch144: xsa155-linux43-0005-xen-blkback-read-from-indirect-descriptors-only-once.patch
+Patch145: xsa155-linux-xsa155-0006-xen-scsiback-safely-copy-requests.patch
+Patch146: xsa155-linux-xsa155-0007-xen-pciback-Save-xen_pci_op-commands-before-processi.patch
+
+#XSA157 allowed for public cloud operators
+Patch150: xsa157-0001-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msi-wh.patch
+Patch151: xsa157-0002-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msix-w.patch
+Patch152: xsa157-0003-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
+Patch153: xsa157-0004-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
+Patch154: xsa157-0005-xen-pciback-Don-t-allow-MSI-X-ops-if-PCI_COMMAND_MEM.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -337,6 +353,20 @@ popd > /dev/null
 %patch120 -p0
 
 %patch130 -p0
+
+%patch140 -p1
+%patch141 -p1
+%patch142 -p1
+%patch143 -p1
+%patch144 -p1
+%patch145 -p1
+%patch146 -p1
+
+%patch150 -p1
+%patch151 -p1
+%patch152 -p1
+%patch153 -p1
+%patch154 -p1
 
 popd > /dev/null
 
@@ -824,6 +854,9 @@ fi
 %endif
 
 %changelog
+* Tue Dec 08 2015 Sarah Newman <srn@prgmr.com> - 3.18.21-17
+- import XSAs 155 and 157
+
 * Fri Sep 25 2015 Johnny Hughes <johnny@centos.org> - 3.18.21-16
 - use linux-firmware from centos-7 kernel
 
