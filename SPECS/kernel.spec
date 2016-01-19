@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.21
+%define LKAver 3.18.25
 
 # Define the buildid, if required.
 #define buildid .1
@@ -854,6 +854,9 @@ fi
 %endif
 
 %changelog
+* Tue Jan 19 2016 Johnny Hughes <johnny@centos.org> 3.18.25-17
+- upgrade to upstream 3.18.25 kernel
+
 * Tue Dec 08 2015 Sarah Newman <srn@prgmr.com> - 3.18.21-17
 - import XSAs 155 and 157
 
