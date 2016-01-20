@@ -93,7 +93,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 17%{?buildid}%{?dist}
+%define pkg_release 18%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -208,6 +208,9 @@ Patch151: xsa157-0002-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msix-w.patch
 Patch152: xsa157-0003-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
 Patch153: xsa157-0004-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
 Patch154: xsa157-0005-xen-pciback-Don-t-allow-MSI-X-ops-if-PCI_COMMAND_MEM.patch
+
+#CVE-2016-0728
+Patch200: KEYS-Fix-keyring-ref-leak-in-join_session_keyring.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -367,6 +370,8 @@ popd > /dev/null
 %patch152 -p1
 %patch153 -p1
 %patch154 -p1
+
+%patch200 -p1
 
 popd > /dev/null
 
@@ -854,6 +859,9 @@ fi
 %endif
 
 %changelog
+* Tue Jan 19 2016 Johnny Hughes <johnny@centos.org> 3.18.25-18
+- Roll in fix for CVE-2016-0728 (Patch200)
+
 * Tue Jan 19 2016 Johnny Hughes <johnny@centos.org> 3.18.25-17
 - upgrade to upstream 3.18.25 kernel
 
