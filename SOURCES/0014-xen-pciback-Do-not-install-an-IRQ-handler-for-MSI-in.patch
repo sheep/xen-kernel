@@ -1,7 +1,7 @@
 From ba55e11ba7074d9506e15eddb57c50ed7bb7d213 Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Mon, 2 Nov 2015 17:24:08 -0500
-Subject: [PATCH 14/17] xen/pciback: Do not install an IRQ handler for MSI
+Subject: [PATCH] xen/pciback: Do not install an IRQ handler for MSI
  interrupts. (XSA-157)
 
 Otherwise an guest can subvert the generic MSI code to trigger

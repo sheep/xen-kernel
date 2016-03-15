@@ -1,7 +1,7 @@
 From 1fd86a3925b1f928328ef21e675b009d08d479d3 Mon Sep 17 00:00:00 2001
 From: George Dunlap <george.dunlap@citrix.com>
 Date: Tue, 15 Mar 2016 14:21:33 +0000
-Subject: [PATCH 03/17] Add blktap makefile
+Subject: [PATCH] Add blktap makefile
 
 ---
  drivers/block/Makefile | 2 ++

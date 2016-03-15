@@ -1,7 +1,7 @@
 From 92fe99139ad881d126268339346202d5d90173da Mon Sep 17 00:00:00 2001
 From: David Vrabel <david.vrabel@citrix.com>
 Date: Fri, 30 Oct 2015 14:58:08 +0000
-Subject: [PATCH 05/17] xen: Add RING_COPY_REQUEST() (XSA155)
+Subject: [PATCH] xen: Add RING_COPY_REQUEST() (XSA155)
 
 Using RING_GET_REQUEST() on a shared ring is easy to use incorrectly
 (i.e., by not considering that the other end may alter the data in the

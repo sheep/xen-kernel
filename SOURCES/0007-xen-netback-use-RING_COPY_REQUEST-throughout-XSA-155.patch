@@ -1,8 +1,7 @@
 From 1fbfde536ca685991c2a65bb0291a42b3633458e Mon Sep 17 00:00:00 2001
 From: David Vrabel <david.vrabel@citrix.com>
 Date: Fri, 30 Oct 2015 15:17:06 +0000
-Subject: [PATCH 07/17] xen-netback: use RING_COPY_REQUEST() throughout
- (XSA-155)
+Subject: [PATCH] xen-netback: use RING_COPY_REQUEST() throughout (XSA-155)
 
 Instead of open-coding memcpy()s and directly accessing Tx and Rx
 requests, use the new RING_COPY_REQUEST() that ensures the local copy

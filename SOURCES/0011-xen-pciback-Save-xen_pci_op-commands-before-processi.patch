@@ -1,8 +1,8 @@
 From cd8676dd9123218ff6f9fccbab1210f01511afc1 Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Mon, 16 Nov 2015 12:40:48 -0500
-Subject: [PATCH 11/17] xen/pciback: Save xen_pci_op commands before processing
- it (XSA-155)
+Subject: [PATCH] xen/pciback: Save xen_pci_op commands before processing it
+ (XSA-155)
 
 Double fetch vulnerabilities that happen when a variable is
 fetched twice from shared memory but a security check is only

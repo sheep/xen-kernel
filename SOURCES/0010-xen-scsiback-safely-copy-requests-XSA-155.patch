@@ -1,7 +1,7 @@
 From 103b02451a4b05a7fcd62e92286b95650c1c939f Mon Sep 17 00:00:00 2001
 From: David Vrabel <david.vrabel@citrix.com>
 Date: Mon, 16 Nov 2015 18:02:32 +0000
-Subject: [PATCH 10/17] xen-scsiback: safely copy requests (XSA-155)
+Subject: [PATCH] xen-scsiback: safely copy requests (XSA-155)
 
 The copy of the ring request was lacking a following barrier(),
 potentially allowing the compiler to optimize the copy away.

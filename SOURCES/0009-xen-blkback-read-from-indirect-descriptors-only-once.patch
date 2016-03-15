@@ -2,7 +2,7 @@ From 5c3dbe0776e748cd552549b1e5ef9f105c5464ee Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=3D=3FUTF-8=3Fq=3FRoger=3D20Pau=3D20Monn=3DC3=3DA9=3F=3D?=
  <roger.pau@citrix.com>
 Date: Tue, 3 Nov 2015 16:40:43 +0000
-Subject: [PATCH 09/17] xen-blkback: read from indirect descriptors only once
+Subject: [PATCH] xen-blkback: read from indirect descriptors only once
  (XSA-155)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

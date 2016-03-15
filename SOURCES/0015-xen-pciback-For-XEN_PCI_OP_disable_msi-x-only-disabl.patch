@@ -1,8 +1,8 @@
 From 73cbe3063cd7026d8d954bff4d5a81c28bbf3dd1 Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Wed, 1 Apr 2015 10:49:47 -0400
-Subject: [PATCH 15/17] xen/pciback: For XEN_PCI_OP_disable_msi[|x] only
- disable if device has MSI(X) enabled. (XSA-157)
+Subject: [PATCH] xen/pciback: For XEN_PCI_OP_disable_msi[|x] only disable if
+ device has MSI(X) enabled. (XSA-157)
 
 Otherwise just continue on, returning the same values as
 previously (return of 0, and op->result has the PIRQ value).

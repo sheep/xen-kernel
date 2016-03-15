@@ -1,8 +1,8 @@
 From 47b995fd9acaa26d49d698e697ab0ddf408fc81f Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Mon, 2 Nov 2015 18:07:44 -0500
-Subject: [PATCH 13/17] xen/pciback: Return error on XEN_PCI_OP_enable_msix
- when device has MSI or MSI-X enabled (XSA-157)
+Subject: [PATCH] xen/pciback: Return error on XEN_PCI_OP_enable_msix when
+ device has MSI or MSI-X enabled (XSA-157)
 
 The guest sequence of:
 

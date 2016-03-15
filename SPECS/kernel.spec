@@ -93,7 +93,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 18%{?buildid}%{?dist}
+%define pkg_release 19%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -210,6 +210,9 @@ Patch10016: 0016-xen-pciback-Don-t-allow-MSI-X-ops-if-PCI_COMMAND_MEM.patch
 
 #CVE-2016-0728
 Patch10017: 0017-KEYS-Fix-keyring-ref-leak-in-join_session_keyring-CV.patch
+
+#XSA171
+Patch10018: 0018-x86-iopl-64-properly-context-switch-IOPL-on-Xen-PV.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -367,6 +370,7 @@ popd > /dev/null
 %patch10015 -p1
 %patch10016 -p1
 %patch10017 -p1
+%patch10018 -p1
 
 popd > /dev/null
 

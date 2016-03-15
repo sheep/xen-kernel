@@ -1,7 +1,7 @@
 From 57185aeab4aed326c67f95f58fdfaa313adf5c34 Mon Sep 17 00:00:00 2001
 From: George Dunlap <george.dunlap@citrix.com>
 Date: Tue, 15 Mar 2016 14:21:24 +0000
-Subject: [PATCH 02/17] Add blktap Kconfig
+Subject: [PATCH] Add blktap Kconfig
 
 ---
  drivers/block/Kconfig | 12 ++++++++++++

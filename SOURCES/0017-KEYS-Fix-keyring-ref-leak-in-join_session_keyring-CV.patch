@@ -1,7 +1,7 @@
 From 6ee8ad58cd094932d52a95b7a24f7e23ca33b662 Mon Sep 17 00:00:00 2001
 From: Yevgeny Pats <yevgeny@perception-point.io>
 Date: Mon, 11 Jan 2016 12:05:28 +0000
-Subject: [PATCH 17/17] KEYS: Fix keyring ref leak in join_session_keyring()
+Subject: [PATCH] KEYS: Fix keyring ref leak in join_session_keyring()
  (CVE-2016-0728)
 
 If a thread is asked to join as a session keyring the keyring that's already
