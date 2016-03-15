@@ -1,9 +1,7 @@
+From 68a1f5dbc614fe00692a9b270277610bbb62ac27 Mon Sep 17 00:00:00 2001
 From: David Vrabel <david.vrabel@citrix.com>
-Date: Mon, 21 Jan 2013 15:18:27 +0000 (+0000)
-Subject: block/blktap: add blktap driver
-X-Git-Url: http://xenbits.xen.org/gitweb/?p=people%2Fdvrabel%2Flinux.git;a=commitdiff_plain;h=24140a1e9f93d1fad6e06d4445115388c57f8c77
-
-block/blktap: add blktap driver
+Date: Mon, 21 Jan 2013 15:18:27 +0000
+Subject: [PATCH 01/17] block/blktap: add blktap driver
 
 Add the blktap driver from:
 
@@ -15,21 +13,38 @@ The requires the userspace from:
 
 Signed-off-by: David Vrabel <david.vrabel@citrix.com>
 ---
+ drivers/block/blktap/Makefile  |   3 +
+ drivers/block/blktap/blktap.h  | 187 +++++++++++
+ drivers/block/blktap/control.c | 338 +++++++++++++++++++
+ drivers/block/blktap/device.c  | 641 ++++++++++++++++++++++++++++++++++++
+ drivers/block/blktap/request.c | 452 +++++++++++++++++++++++++
+ drivers/block/blktap/ring.c    | 728 +++++++++++++++++++++++++++++++++++++++++
+ drivers/block/blktap/sysfs.c   | 316 ++++++++++++++++++
+ include/linux/blktap.h         | 137 ++++++++
+ 8 files changed, 2802 insertions(+)
+ create mode 100644 drivers/block/blktap/Makefile
+ create mode 100644 drivers/block/blktap/blktap.h
+ create mode 100644 drivers/block/blktap/control.c
+ create mode 100644 drivers/block/blktap/device.c
+ create mode 100644 drivers/block/blktap/request.c
+ create mode 100644 drivers/block/blktap/ring.c
+ create mode 100644 drivers/block/blktap/sysfs.c
+ create mode 100644 include/linux/blktap.h
 
-diff --git drivers/block/blktap/Makefile drivers/block/blktap/Makefile
+diff --git a/drivers/block/blktap/Makefile b/drivers/block/blktap/Makefile
 new file mode 100644
 index 0000000..0bbe1e9
 --- /dev/null
-+++ drivers/block/blktap/Makefile
++++ b/drivers/block/blktap/Makefile
 @@ -0,0 +1,3 @@
 +obj-m := blktap.o
 +
 +blktap-objs := control.o ring.o device.o request.o sysfs.o
-diff --git drivers/block/blktap/blktap.h drivers/block/blktap/blktap.h
+diff --git a/drivers/block/blktap/blktap.h b/drivers/block/blktap/blktap.h
 new file mode 100644
 index 0000000..a9af702
 --- /dev/null
-+++ drivers/block/blktap/blktap.h
++++ b/drivers/block/blktap/blktap.h
 @@ -0,0 +1,187 @@
 +/*
 + *
@@ -218,11 +233,11 @@ index 0000000..a9af702
 +
 +
 +#endif
-diff --git drivers/block/blktap/control.c drivers/block/blktap/control.c
+diff --git a/drivers/block/blktap/control.c b/drivers/block/blktap/control.c
 new file mode 100644
 index 0000000..65ab23c
 --- /dev/null
-+++ drivers/block/blktap/control.c
++++ b/drivers/block/blktap/control.c
 @@ -0,0 +1,338 @@
 +/*
 + *
@@ -562,11 +577,11 @@ index 0000000..65ab23c
 +module_init(blktap_init);
 +module_exit(blktap_exit);
 +MODULE_LICENSE("Dual BSD/GPL");
-diff --git drivers/block/blktap/device.c drivers/block/blktap/device.c
+diff --git a/drivers/block/blktap/device.c b/drivers/block/blktap/device.c
 new file mode 100644
 index 0000000..925f097
 --- /dev/null
-+++ drivers/block/blktap/device.c
++++ b/drivers/block/blktap/device.c
 @@ -0,0 +1,641 @@
 +/*
 + *
@@ -1209,11 +1224,11 @@ index 0000000..925f097
 +	if (blktap_device_major)
 +		unregister_blkdev(blktap_device_major, "tapdev");
 +}
-diff --git drivers/block/blktap/request.c drivers/block/blktap/request.c
+diff --git a/drivers/block/blktap/request.c b/drivers/block/blktap/request.c
 new file mode 100644
 index 0000000..430bb4b
 --- /dev/null
-+++ drivers/block/blktap/request.c
++++ b/drivers/block/blktap/request.c
 @@ -0,0 +1,452 @@
 +/*
 + *
@@ -1667,11 +1682,11 @@ index 0000000..430bb4b
 +		request_cache = NULL;
 +	}
 +}
-diff --git drivers/block/blktap/ring.c drivers/block/blktap/ring.c
+diff --git a/drivers/block/blktap/ring.c b/drivers/block/blktap/ring.c
 new file mode 100644
-index 0000000..cef1fe9
+index 0000000..426df92
 --- /dev/null
-+++ drivers/block/blktap/ring.c
++++ b/drivers/block/blktap/ring.c
 @@ -0,0 +1,728 @@
 +/*
 + *
@@ -2401,11 +2416,11 @@ index 0000000..cef1fe9
 +
 +	blktap_ring_major = 0;
 +}
-diff --git drivers/block/blktap/sysfs.c drivers/block/blktap/sysfs.c
+diff --git a/drivers/block/blktap/sysfs.c b/drivers/block/blktap/sysfs.c
 new file mode 100644
 index 0000000..850a8e3
 --- /dev/null
-+++ drivers/block/blktap/sysfs.c
++++ b/drivers/block/blktap/sysfs.c
 @@ -0,0 +1,316 @@
 +/*
 + *
@@ -2723,11 +2738,11 @@ index 0000000..850a8e3
 +
 +	return err;
 +}
-diff --git include/linux/blktap.h include/linux/blktap.h
+diff --git a/include/linux/blktap.h b/include/linux/blktap.h
 new file mode 100644
 index 0000000..e61acb9
 --- /dev/null
-+++ include/linux/blktap.h
++++ b/include/linux/blktap.h
 @@ -0,0 +1,137 @@
 +/*
 + *
@@ -2866,3 +2881,6 @@ index 0000000..e61acb9
 +};
 +
 +#endif /* _LINUX_BLKTAP_H */
+-- 
+2.1.4
+

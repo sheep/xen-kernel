@@ -1,8 +1,8 @@
-From e9ab9e04ed76ef06b4ba9a30b3724ca563fdf1fa Mon Sep 17 00:00:00 2001
+From 42a3c2899de73356968eefdfb68b76c57f240529 Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Mon, 2 Nov 2015 18:13:27 -0500
-Subject: [PATCH v2 XSA157 5/5] xen/pciback: Don't allow MSI-X ops if
- PCI_COMMAND_MEMORY is not set.
+Subject: [PATCH 16/17] xen/pciback: Don't allow MSI-X ops if
+ PCI_COMMAND_MEMORY is not set. (XSA-157)
 
 commit f598282f51 ("PCI: Fix the NIU MSI-X problem in a better way")
 teaches us that dealing with MSI-X can be troublesome.
@@ -34,7 +34,7 @@ Signed-off-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/xen/xen-pciback/pciback_ops.c b/drivers/xen/xen-pciback/pciback_ops.c
-index 648c09c..edb9357 100644
+index 4ee5fc0..73dafdc 100644
 --- a/drivers/xen/xen-pciback/pciback_ops.c
 +++ b/drivers/xen/xen-pciback/pciback_ops.c
 @@ -212,6 +212,7 @@ int xen_pcibk_enable_msix(struct xen_pcibk_device *pdev,
@@ -60,5 +60,5 @@ index 648c09c..edb9357 100644
  
  	entries = kmalloc(op->value * sizeof(*entries), GFP_KERNEL);
 -- 
-2.1.0
+2.1.4
 

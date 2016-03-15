@@ -1,7 +1,17 @@
-diff -uNrp drivers/block/Kconfig drivers/block/Kconfig
---- drivers/block/Kconfig	2013-09-14 08:55:12.000000000 -0500
-+++ drivers/block/Kconfig	2013-11-12 10:48:14.700766754 -0600
-@@ -541,4 +541,16 @@ config BLK_DEV_RSXX
+From 57185aeab4aed326c67f95f58fdfaa313adf5c34 Mon Sep 17 00:00:00 2001
+From: George Dunlap <george.dunlap@citrix.com>
+Date: Tue, 15 Mar 2016 14:21:24 +0000
+Subject: [PATCH 02/17] Add blktap Kconfig
+
+---
+ drivers/block/Kconfig | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+index 014a1cf..ff77cad 100644
+--- a/drivers/block/Kconfig
++++ b/drivers/block/Kconfig
+@@ -557,4 +557,16 @@ config BLK_DEV_RSXX
  	  To compile this driver as a module, choose M here: the
  	  module will be called rsxx.
  
@@ -18,3 +28,6 @@ diff -uNrp drivers/block/Kconfig drivers/block/Kconfig
 +         driver can safely coexist with the existing blockback driver.
 +
  endif # BLK_DEV
+-- 
+2.1.4
+

@@ -187,30 +187,29 @@ Source9: 3.18.17-bnx2x-firmware.tgz
 #Patches
 
 #xen patches
-Patch118:  3.18.12-xen-block-blktap-dkms.patch
-Patch119:  3.18.12-xen-blktap-config.patch
-Patch120:  3.18.12-xen-blktap-makefile.patch
-
-Patch130:  3.18.17-bnx2-missing-09-6.2.1b.fw.patch
+Patch10001: 0001-block-blktap-add-blktap-driver.patch
+Patch10002: 0002-Add-blktap-Kconfig.patch
+Patch10003: 0003-Add-blktap-makefile.patch
+Patch10004: 0004-Wire-in-missing-bnx2-firmware.patch
 
 #XSA155 allowed for public cloud operators
-Patch140: xsa155-linux-xsa155-0001-xen-Add-RING_COPY_REQUEST.patch
-Patch141: xsa155-linux-xsa155-0002-xen-netback-don-t-use-last-request-to-determine-mini.patch
-Patch142: xsa155-linux-xsa155-0003-xen-netback-use-RING_COPY_REQUEST-throughout.patch
-Patch143: xsa155-linux-xsa155-0004-xen-blkback-only-read-request-operation-from-shared-.patch
-Patch144: xsa155-linux43-0005-xen-blkback-read-from-indirect-descriptors-only-once.patch
-Patch145: xsa155-linux-xsa155-0006-xen-scsiback-safely-copy-requests.patch
-Patch146: xsa155-linux-xsa155-0007-xen-pciback-Save-xen_pci_op-commands-before-processi.patch
+Patch10005: 0005-xen-Add-RING_COPY_REQUEST-XSA155.patch
+Patch10006: 0006-xen-netback-don-t-use-last-request-to-determine-mini.patch
+Patch10007: 0007-xen-netback-use-RING_COPY_REQUEST-throughout-XSA-155.patch
+Patch10008: 0008-xen-blkback-only-read-request-operation-from-shared-.patch
+Patch10009: 0009-xen-blkback-read-from-indirect-descriptors-only-once.patch
+Patch10010: 0010-xen-scsiback-safely-copy-requests-XSA-155.patch
 
 #XSA157 allowed for public cloud operators
-Patch150: xsa157-0001-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msi-wh.patch
-Patch151: xsa157-0002-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msix-w.patch
-Patch152: xsa157-0003-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
-Patch153: xsa157-0004-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
-Patch154: xsa157-0005-xen-pciback-Don-t-allow-MSI-X-ops-if-PCI_COMMAND_MEM.patch
+Patch10011: 0011-xen-pciback-Save-xen_pci_op-commands-before-processi.patch
+Patch10012: 0012-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msi-wh.patch
+Patch10013: 0013-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msix-w.patch
+Patch10014: 0014-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
+Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
+Patch10016: 0016-xen-pciback-Don-t-allow-MSI-X-ops-if-PCI_COMMAND_MEM.patch
 
 #CVE-2016-0728
-Patch200: KEYS-Fix-keyring-ref-leak-in-join_session_keyring.patch
+Patch10017: 0017-KEYS-Fix-keyring-ref-leak-in-join_session_keyring-CV.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -351,27 +350,23 @@ for fwfile in $(ls *.fw)
 popd > /dev/null
 
 #roll in patches
-%patch118 -p0
-%patch119 -p0
-%patch120 -p0
-
-%patch130 -p0
-
-%patch140 -p1
-%patch141 -p1
-%patch142 -p1
-%patch143 -p1
-%patch144 -p1
-%patch145 -p1
-%patch146 -p1
-
-%patch150 -p1
-%patch151 -p1
-%patch152 -p1
-%patch153 -p1
-%patch154 -p1
-
-%patch200 -p1
+%patch10001 -p1
+%patch10002 -p1
+%patch10003 -p1
+%patch10004 -p1
+%patch10005 -p1
+%patch10006 -p1
+%patch10007 -p1
+%patch10008 -p1
+%patch10009 -p1
+%patch10010 -p1
+%patch10011 -p1
+%patch10012 -p1
+%patch10013 -p1
+%patch10014 -p1
+%patch10015 -p1
+%patch10016 -p1
+%patch10017 -p1
 
 popd > /dev/null
 
@@ -1049,4 +1044,3 @@ fi
 
 * Tue Nov 28 2012 Johnny Hughes <johnny@centos.org>
 - started with the 3.6.x kernel SOURCE RPM from http://elrepo.org/
- 

@@ -1,8 +1,8 @@
-From aa48314c60da1035a8e6cc05bec12838a074de98 Mon Sep 17 00:00:00 2001
+From ba55e11ba7074d9506e15eddb57c50ed7bb7d213 Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Mon, 2 Nov 2015 17:24:08 -0500
-Subject: [PATCH v2 XSA157 3/5] xen/pciback: Do not install an IRQ handler for
- MSI interrupts.
+Subject: [PATCH 14/17] xen/pciback: Do not install an IRQ handler for MSI
+ interrupts. (XSA-157)
 
 Otherwise an guest can subvert the generic MSI code to trigger
 an BUG_ON condition during MSI interrupt freeing:
@@ -59,7 +59,7 @@ Signed-off-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/drivers/xen/xen-pciback/pciback_ops.c b/drivers/xen/xen-pciback/pciback_ops.c
-index a107928..5bb76c0 100644
+index 029f33d..d0696ce 100644
 --- a/drivers/xen/xen-pciback/pciback_ops.c
 +++ b/drivers/xen/xen-pciback/pciback_ops.c
 @@ -70,6 +70,13 @@ static void xen_pcibk_control_isr(struct pci_dev *dev, int reset)
@@ -77,5 +77,5 @@ index a107928..5bb76c0 100644
  				xen_pcibk_guest_interrupt, IRQF_SHARED,
  				dev_data->irq_name, dev);
 -- 
-2.1.0
+2.1.4
 

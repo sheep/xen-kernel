@@ -1,8 +1,8 @@
-From 59a403750d3796b45376041a4843fcde436ae37e Mon Sep 17 00:00:00 2001
+From 73cbe3063cd7026d8d954bff4d5a81c28bbf3dd1 Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Wed, 1 Apr 2015 10:49:47 -0400
-Subject: [PATCH v2 XSA157 4/5] xen/pciback: For XEN_PCI_OP_disable_msi[|x]
- only disable if device has MSI(X) enabled.
+Subject: [PATCH 15/17] xen/pciback: For XEN_PCI_OP_disable_msi[|x] only
+ disable if device has MSI(X) enabled. (XSA-157)
 
 Otherwise just continue on, returning the same values as
 previously (return of 0, and op->result has the PIRQ value).
@@ -32,7 +32,7 @@ Signed-off-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
  1 file changed, 20 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/xen/xen-pciback/pciback_ops.c b/drivers/xen/xen-pciback/pciback_ops.c
-index 5bb76c0..648c09c 100644
+index d0696ce..4ee5fc0 100644
 --- a/drivers/xen/xen-pciback/pciback_ops.c
 +++ b/drivers/xen/xen-pciback/pciback_ops.c
 @@ -185,20 +185,23 @@ static
@@ -101,5 +101,5 @@ index 5bb76c0..648c09c 100644
  }
  #endif
 -- 
-2.1.0
+2.1.4
 

@@ -1,8 +1,8 @@
-From f6f4388c917ce96b075a239a4535b8efc6064d14 Mon Sep 17 00:00:00 2001
+From cd8676dd9123218ff6f9fccbab1210f01511afc1 Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Mon, 16 Nov 2015 12:40:48 -0500
-Subject: [PATCH 7/7] xen/pciback: Save xen_pci_op commands before processing
- it
+Subject: [PATCH 11/17] xen/pciback: Save xen_pci_op commands before processing
+ it (XSA-155)
 
 Double fetch vulnerabilities that happen when a variable is
 fetched twice from shared memory but a security check is only
@@ -30,7 +30,7 @@ Signed-off-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
  2 files changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/xen/xen-pciback/pciback.h b/drivers/xen/xen-pciback/pciback.h
-index 58e38d5..4d529f3 100644
+index f72af87..560b3ec 100644
 --- a/drivers/xen/xen-pciback/pciback.h
 +++ b/drivers/xen/xen-pciback/pciback.h
 @@ -37,6 +37,7 @@ struct xen_pcibk_device {
@@ -77,5 +77,5 @@ index c4a0666..a0e0e3e 100644
  	wmb();
  	clear_bit(_XEN_PCIF_active, (unsigned long *)&pdev->sh_info->flags);
 -- 
-2.1.0
+2.1.4
 

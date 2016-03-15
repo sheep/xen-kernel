@@ -1,8 +1,9 @@
-From 084b8c2e77f1ac07e4a3a121ff957c49a9379385 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>
+From d84784e78c228c5aecd2d097e76f3d99c6bfef70 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=3D=3FUTF-8=3Fq=3FRoger=3D20Pau=3D20Monn=3DC3=3DA9=3F=3D?=
+ <roger.pau@citrix.com>
 Date: Tue, 3 Nov 2015 16:34:09 +0000
-Subject: [PATCH 4/7] xen-blkback: only read request operation from shared ring
- once
+Subject: [PATCH 08/17] xen-blkback: only read request operation from shared
+ ring once (XSA-155)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -24,10 +25,10 @@ Signed-off-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/block/xen-blkback/common.h b/drivers/block/xen-blkback/common.h
-index 68e87a0..c929ae2 100644
+index f65b807..d179195 100644
 --- a/drivers/block/xen-blkback/common.h
 +++ b/drivers/block/xen-blkback/common.h
-@@ -408,8 +408,8 @@ static inline void blkif_get_x86_32_req(struct blkif_request *dst,
+@@ -391,8 +391,8 @@ static inline void blkif_get_x86_32_req(struct blkif_request *dst,
  					struct blkif_x86_32_request *src)
  {
  	int i, n = BLKIF_MAX_SEGMENTS_PER_REQUEST, j;
@@ -38,7 +39,7 @@ index 68e87a0..c929ae2 100644
  	case BLKIF_OP_READ:
  	case BLKIF_OP_WRITE:
  	case BLKIF_OP_WRITE_BARRIER:
-@@ -456,8 +456,8 @@ static inline void blkif_get_x86_64_req(struct blkif_request *dst,
+@@ -439,8 +439,8 @@ static inline void blkif_get_x86_64_req(struct blkif_request *dst,
  					struct blkif_x86_64_request *src)
  {
  	int i, n = BLKIF_MAX_SEGMENTS_PER_REQUEST, j;
@@ -50,5 +51,5 @@ index 68e87a0..c929ae2 100644
  	case BLKIF_OP_WRITE:
  	case BLKIF_OP_WRITE_BARRIER:
 -- 
-2.1.0
+2.1.4
 

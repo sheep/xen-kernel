@@ -1,7 +1,17 @@
-diff -uNrp firmware.orig/Makefile firmware/Makefile
---- firmware.orig/Makefile	2015-06-28 12:40:40.000000000 -0500
-+++ firmware/Makefile	2015-07-06 13:00:02.629237171 -0500
-@@ -31,14 +31,66 @@ fw-shipped-$(CONFIG_ADAPTEC_STARFIRE) +=
+From 33eef0e06b57a733af84cad0062c7afc705b91c9 Mon Sep 17 00:00:00 2001
+From: George Dunlap <george.dunlap@citrix.com>
+Date: Tue, 15 Mar 2016 14:21:59 +0000
+Subject: [PATCH 04/17] Wire in missing bnx2 firmware
+
+---
+ firmware/Makefile | 68 ++++++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 60 insertions(+), 8 deletions(-)
+
+diff --git a/firmware/Makefile b/firmware/Makefile
+index e297e1b..cd31e33 100644
+--- a/firmware/Makefile
++++ b/firmware/Makefile
+@@ -31,14 +31,66 @@ fw-shipped-$(CONFIG_ADAPTEC_STARFIRE) += adaptec/starfire_rx.bin \
  					 adaptec/starfire_tx.bin
  fw-shipped-$(CONFIG_ATARI_DSP56K) += dsp56k/bootstrap.bin
  fw-shipped-$(CONFIG_ATM_AMBASSADOR) += atmsar11.fw
@@ -76,3 +86,6 @@ diff -uNrp firmware.orig/Makefile firmware/Makefile
  fw-shipped-$(CONFIG_CASSINI) += sun/cassini.bin
  fw-shipped-$(CONFIG_CHELSIO_T3) += cxgb3/t3b_psram-1.1.0.bin \
  				   cxgb3/t3c_psram-1.1.0.bin \
+-- 
+2.1.4
+

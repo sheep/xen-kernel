@@ -1,7 +1,7 @@
-From 89739c14c72e5c1626a5cd5e09cbb2efeaadb6d8 Mon Sep 17 00:00:00 2001
+From 103b02451a4b05a7fcd62e92286b95650c1c939f Mon Sep 17 00:00:00 2001
 From: David Vrabel <david.vrabel@citrix.com>
 Date: Mon, 16 Nov 2015 18:02:32 +0000
-Subject: [PATCH 6/7] xen-scsiback: safely copy requests
+Subject: [PATCH 10/17] xen-scsiback: safely copy requests (XSA-155)
 
 The copy of the ring request was lacking a following barrier(),
 potentially allowing the compiler to optimize the copy away.
@@ -20,10 +20,10 @@ Signed-off-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/xen/xen-scsiback.c b/drivers/xen/xen-scsiback.c
-index 43bcae8..ad4eb10 100644
+index d30c6b2..1142fd5 100644
 --- a/drivers/xen/xen-scsiback.c
 +++ b/drivers/xen/xen-scsiback.c
-@@ -726,7 +726,7 @@ static int scsiback_do_cmd_fn(struct vscsibk_info *info)
+@@ -737,7 +737,7 @@ static int scsiback_do_cmd_fn(struct vscsibk_info *info)
  		if (!pending_req)
  			return 1;
  
@@ -33,5 +33,5 @@ index 43bcae8..ad4eb10 100644
  
  		err = prepare_pending_reqs(info, &ring_req, pending_req);
 -- 
-2.1.0
+2.1.4
 

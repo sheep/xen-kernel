@@ -1,7 +1,8 @@
-From 4127e9ccae0eda622421d21132846abdf74f66ed Mon Sep 17 00:00:00 2001
+From 1fbfde536ca685991c2a65bb0291a42b3633458e Mon Sep 17 00:00:00 2001
 From: David Vrabel <david.vrabel@citrix.com>
 Date: Fri, 30 Oct 2015 15:17:06 +0000
-Subject: [PATCH 3/7] xen-netback: use RING_COPY_REQUEST() throughout
+Subject: [PATCH 07/17] xen-netback: use RING_COPY_REQUEST() throughout
+ (XSA-155)
 
 Instead of open-coding memcpy()s and directly accessing Tx and Rx
 requests, use the new RING_COPY_REQUEST() that ensures the local copy
@@ -22,10 +23,10 @@ Signed-off-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
  1 file changed, 14 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/net/xen-netback/netback.c b/drivers/net/xen-netback/netback.c
-index b683581..1049c34 100644
+index 95da490..e6f6f2c 100644
 --- a/drivers/net/xen-netback/netback.c
 +++ b/drivers/net/xen-netback/netback.c
-@@ -258,18 +258,18 @@ static struct xenvif_rx_meta *get_next_rx_buffer(struct xenvif_queue *queue,
+@@ -288,18 +288,18 @@ static struct xenvif_rx_meta *get_next_rx_buffer(struct xenvif_queue *queue,
  						 struct netrx_pending_operations *npo)
  {
  	struct xenvif_rx_meta *meta;
@@ -48,7 +49,7 @@ index b683581..1049c34 100644
  
  	return meta;
  }
-@@ -424,7 +424,7 @@ static int xenvif_gop_skb(struct sk_buff *skb,
+@@ -450,7 +450,7 @@ static int xenvif_gop_skb(struct sk_buff *skb,
  	struct xenvif *vif = netdev_priv(skb->dev);
  	int nr_frags = skb_shinfo(skb)->nr_frags;
  	int i;
@@ -57,7 +58,7 @@ index b683581..1049c34 100644
  	struct xenvif_rx_meta *meta;
  	unsigned char *data;
  	int head = 1;
-@@ -443,15 +443,15 @@ static int xenvif_gop_skb(struct sk_buff *skb,
+@@ -471,15 +471,15 @@ static int xenvif_gop_skb(struct sk_buff *skb,
  
  	/* Set up a GSO prefix descriptor, if necessary */
  	if ((1 << gso_type) & vif->gso_prefix_mask) {
@@ -76,7 +77,7 @@ index b683581..1049c34 100644
  	meta = npo->meta + npo->meta_prod++;
  
  	if ((1 << gso_type) & vif->gso_mask) {
-@@ -463,9 +463,9 @@ static int xenvif_gop_skb(struct sk_buff *skb,
+@@ -491,9 +491,9 @@ static int xenvif_gop_skb(struct sk_buff *skb,
  	}
  
  	meta->size = 0;
@@ -88,7 +89,7 @@ index b683581..1049c34 100644
  
  	data = skb->data;
  	while (data < skb_tail_pointer(skb)) {
-@@ -709,7 +709,7 @@ static void xenvif_tx_err(struct xenvif_queue *queue,
+@@ -838,7 +838,7 @@ static void xenvif_tx_err(struct xenvif_queue *queue,
  		spin_unlock_irqrestore(&queue->response_lock, flags);
  		if (cons == end)
  			break;
@@ -97,7 +98,7 @@ index b683581..1049c34 100644
  	} while (1);
  	queue->tx.req_cons = cons;
  }
-@@ -776,8 +776,7 @@ static int xenvif_count_requests(struct xenvif_queue *queue,
+@@ -905,8 +905,7 @@ static int xenvif_count_requests(struct xenvif_queue *queue,
  		if (drop_err)
  			txp = &dropped_tx;
  
@@ -107,7 +108,7 @@ index b683581..1049c34 100644
  
  		/* If the guest submitted a frame >= 64 KiB then
  		 * first->size overflowed and following slots will
-@@ -1110,8 +1109,7 @@ static int xenvif_get_extras(struct xenvif_queue *queue,
+@@ -1258,8 +1257,7 @@ static int xenvif_get_extras(struct xenvif_queue *queue,
  			return -EBADR;
  		}
  
@@ -117,7 +118,7 @@ index b683581..1049c34 100644
  		if (unlikely(!extra.type ||
  			     extra.type >= XEN_NETIF_EXTRA_TYPE_MAX)) {
  			queue->tx.req_cons = ++cons;
-@@ -1320,7 +1318,7 @@ static void xenvif_tx_build_gops(struct xenvif_queue *queue,
+@@ -1395,7 +1393,7 @@ static void xenvif_tx_build_gops(struct xenvif_queue *queue,
  
  		idx = queue->tx.req_cons;
  		rmb(); /* Ensure that we see the request before we copy it. */
@@ -127,5 +128,5 @@ index b683581..1049c34 100644
  		/* Credit-based scheduling. */
  		if (txreq.size > queue->remaining_credit &&
 -- 
-2.1.0
+2.1.4
 
