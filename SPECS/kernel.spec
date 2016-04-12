@@ -93,7 +93,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 19%{?buildid}%{?dist}
+%define pkg_release 20%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -213,6 +213,9 @@ Patch10017: 0017-KEYS-Fix-keyring-ref-leak-in-join_session_keyring-CV.patch
 
 #XSA171
 Patch10018: 0018-x86-iopl-64-properly-context-switch-IOPL-on-Xen-PV.patch
+
+#XSA174
+Patch10019: 0019-x86-xen-suppress-hugetlbfs-in-PV-guests.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -371,6 +374,7 @@ popd > /dev/null
 %patch10016 -p1
 %patch10017 -p1
 %patch10018 -p1
+%patch10019 -p1
 
 popd > /dev/null
 
@@ -858,6 +862,13 @@ fi
 %endif
 
 %changelog
+* Tue Apr 12 2016 George Dunlap <george.dunlap@citrix.com> 3.18.25-20
+- Roll in fix for XSA-174
+
+* Tue Mar 15 2016 George Dunlap <george.dunlap@citrix.com> 3.18.25-19
+- Refactor
+- Roll in fix for XSA-171
+
 * Tue Jan 19 2016 Johnny Hughes <johnny@centos.org> 3.18.25-18
 - Roll in fix for CVE-2016-0728 (Patch200)
 
