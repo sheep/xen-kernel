@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.25
+%define LKAver 3.18.30
 
 # Define the buildid, if required.
 #define buildid .1
@@ -201,15 +201,9 @@ Patch10009: 0009-xen-blkback-read-from-indirect-descriptors-only-once.patch
 Patch10010: 0010-xen-scsiback-safely-copy-requests-XSA-155.patch
 
 #XSA157 allowed for public cloud operators
-Patch10011: 0011-xen-pciback-Save-xen_pci_op-commands-before-processi.patch
 Patch10012: 0012-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msi-wh.patch
-Patch10013: 0013-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msix-w.patch
 Patch10014: 0014-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
 Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
-Patch10016: 0016-xen-pciback-Don-t-allow-MSI-X-ops-if-PCI_COMMAND_MEM.patch
-
-#CVE-2016-0728
-Patch10017: 0017-KEYS-Fix-keyring-ref-leak-in-join_session_keyring-CV.patch
 
 #XSA171
 Patch10018: 0018-x86-iopl-64-properly-context-switch-IOPL-on-Xen-PV.patch
@@ -366,13 +360,9 @@ popd > /dev/null
 %patch10008 -p1
 %patch10009 -p1
 %patch10010 -p1
-%patch10011 -p1
 %patch10012 -p1
-%patch10013 -p1
 %patch10014 -p1
 %patch10015 -p1
-%patch10016 -p1
-%patch10017 -p1
 %patch10018 -p1
 %patch10019 -p1
 
@@ -862,6 +852,10 @@ fi
 %endif
 
 %changelog
+* Thu Apr 14 2016 Johnny Hughes <johnny@centos.org> 3.18.30-20
+- Upgrade to upstream kernel 3.18.30
+- Remove patches 10011, 10013, 10016, 10017 as they are upstream
+
 * Tue Apr 12 2016 George Dunlap <george.dunlap@citrix.com> 3.18.25-20
 - Roll in fix for XSA-174
 
@@ -1057,5 +1051,5 @@ fi
 - disable XEN_SELFBALLOONING
 - remove the NoSource option for the kernel tarball.
 
-* Tue Nov 28 2012 Johnny Hughes <johnny@centos.org>
+* Wed Nov 28 2012 Johnny Hughes <johnny@centos.org>
 - started with the 3.6.x kernel SOURCE RPM from http://elrepo.org/
