@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.30
+%define LKAver 3.18.32
 
 # Define the buildid, if required.
 #define buildid .1
@@ -205,9 +205,6 @@ Patch10012: 0012-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msi-wh.patch
 Patch10014: 0014-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
 Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
 
-#XSA171
-Patch10018: 0018-x86-iopl-64-properly-context-switch-IOPL-on-Xen-PV.patch
-
 #XSA174
 Patch10019: 0019-x86-xen-suppress-hugetlbfs-in-PV-guests.patch
 
@@ -363,7 +360,6 @@ popd > /dev/null
 %patch10012 -p1
 %patch10014 -p1
 %patch10015 -p1
-%patch10018 -p1
 %patch10019 -p1
 
 popd > /dev/null
@@ -852,6 +848,10 @@ fi
 %endif
 
 %changelog
+* Mon May 09 2016 Johnny Hughes <johnny@centos.org> 3.18.32-20
+- Upgrade to upstream kernel 3.18.32
+- Removed patch for XSA-171, rolled in upstream
+
 * Thu Apr 14 2016 Johnny Hughes <johnny@centos.org> 3.18.30-20
 - Upgrade to upstream kernel 3.18.30
 - Remove patches 10011, 10013, 10016, 10017 as they are upstream
