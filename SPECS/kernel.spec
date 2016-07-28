@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.34
+%define LKAver 3.18.37
 
 # Define the buildid, if required.
 #define buildid .1
@@ -845,6 +845,9 @@ fi
 %endif
 
 %changelog
+* Thu Jul 28 2016 Johnny Hughes <johnny@centos.org> 3.18.37-20
+- upgrade to upstream 3.18.37 kernel
+
 * Fri May 27 2016 Johnny Hughes <johnny@centos.org> 3.18.34-20
 - upgrade to upstream 3.18.34 kernel
 - Removed patch for XSA-174, rolled in upstream
