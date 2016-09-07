@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.40
+%define LKAver 3.18.41
 
 # Define the buildid, if required.
 #define buildid .1
@@ -205,9 +205,6 @@ Patch10012: 0012-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msi-wh.patch
 Patch10014: 0014-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
 Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
 
-#ACKS CVE-2016-5696
-Patch10016: randomize-count-ACKS-per-sec.patch
-
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
 Linux-based operating system. The kernel handles the basic functions
@@ -360,7 +357,6 @@ popd > /dev/null
 %patch10012 -p1
 %patch10014 -p1
 %patch10015 -p1
-%patch10016 -p1
 
 popd > /dev/null
 
@@ -848,9 +844,12 @@ fi
 %endif
 
 %changelog
-* Tue Aug 23 2016 Johnny Hughes <johnny@centos.org> 
-- upgrade to upstream 3.18.40 kernel
+* Wed Sep  7 2016 Johnny Hughes <johnny@centos.org> 3.18.41-20
+- Upgrade to upstream 3.18.41
+- Remove patch 10016 (rolled in upstream)
 
+* Tue Aug 23 2016 Johnny Hughes <johnny@centos.org> 3.18.40-20 
+- upgrade to upstream 3.18.40 kernel
 - CVE-2016-5696 patch (Patch10016)
 
 * Mon Aug 01 2016 Johnny Hughes <johnny@centos.org> 3.18.38-20
