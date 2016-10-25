@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.41
+%define LKAver 3.18.44
 
 # Define the buildid, if required.
 #define buildid .1
@@ -844,6 +844,10 @@ fi
 %endif
 
 %changelog
+* Tue Oct 25 2016 Johnny Hughes <johnny@centos.org>  3.18.44-20
+- Upgrade to upstream 3.18.44
+- CVE-2016-5195 (Dirty COW) fix 
+
 * Wed Sep  7 2016 Johnny Hughes <johnny@centos.org> 3.18.41-20
 - Upgrade to upstream 3.18.41
 - Remove patch 10016 (rolled in upstream)
