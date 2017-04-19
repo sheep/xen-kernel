@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.44
+%define LKAver 4.9.23 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -41,9 +41,7 @@
 %define with_headers 0
 %define with_perf 0
 %define with_vdso_install 0
-%if "%{rhel}" == "7"
 %define with_firmware 0
-%endif
 %endif
 
 # Build only the 32-bit kernel-headers package.
@@ -58,7 +56,7 @@
 
 # Build only the 32-bit kernel packages.
 %ifarch i686
-%define with_nonpae 0
+%define with_nonpae 1
 %define with_doc 0
 %define with_firmware 0
 %endif
@@ -93,7 +91,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 20%{?buildid}%{?dist}
+%define pkg_release 26%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -173,37 +171,22 @@ BuildRequires: xmlto, asciidoc, bc
 BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel, numactl-devel
 BuildRequires: python-devel perl(ExtUtils::Embed) gtk2-devel bison 
 %endif
-BuildRequires: python
+BuildRequires: python openssl-devel
 
 BuildConflicts: rhbuildsys(DiskFree) < 7Gb
 
 # Sources.
 Source0: ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
+Source2: config-i686-NONPAE
 Source3: config-x86_64
-Source8: 3.18.17-bnx2-firmware.tgz
-Source9: 3.18.17-bnx2x-firmware.tgz
 
 #Patches
 
-#xen patches
-Patch10001: 0001-block-blktap-add-blktap-driver.patch
-Patch10002: 0002-Add-blktap-Kconfig.patch
-Patch10003: 0003-Add-blktap-makefile.patch
-Patch10004: 0004-Wire-in-missing-bnx2-firmware.patch
-
-#XSA155 allowed for public cloud operators
-Patch10005: 0005-xen-Add-RING_COPY_REQUEST-XSA155.patch
-Patch10006: 0006-xen-netback-don-t-use-last-request-to-determine-mini.patch
-Patch10007: 0007-xen-netback-use-RING_COPY_REQUEST-throughout-XSA-155.patch
-Patch10008: 0008-xen-blkback-only-read-request-operation-from-shared-.patch
-Patch10009: 0009-xen-blkback-read-from-indirect-descriptors-only-once.patch
-Patch10010: 0010-xen-scsiback-safely-copy-requests-XSA-155.patch
-
-#XSA157 allowed for public cloud operators
-Patch10012: 0012-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msi-wh.patch
-Patch10014: 0014-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
-Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
+Patch10000: blktap2.patch
+Patch10001: export-for-xenfb2.patch
+Patch10002: xen-apic-id-fix.patch
+Patch10003: xen-nested-dom0-fix.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -325,38 +308,34 @@ This package provides the perf tool and the supporting documentation.
 %{__mv} linux-%{LKAver} linux-%{version}-%{release}.%{_target_cpu}
 pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 %{__cp} %{SOURCE1} .
+%{__cp} %{SOURCE2} .
 %{__cp} %{SOURCE3} .
-%{__cp} %{SOURCE8} firmware/bnx2/
-%{__cp} %{SOURCE9} firmware/bnx2x/
-pushd firmware/bnx2/ > /dev/null
-tar xvzf $(basename %{SOURCE8})
-for fwfile in $(ls *.fw)
-  do
-    objcopy -O ihex -I binary $fwfile $fwfile.ihex
-  done
-popd > /dev/null
-pushd firmware/bnx2x/ > /dev/null
-tar xvzf $(basename %{SOURCE9})
-for fwfile in $(ls *.fw)
-  do
-    objcopy -O ihex -I binary $fwfile $fwfile.ihex
-  done
-popd > /dev/null
+
+# to change firmware in the kernel
+# now using linux-firmware package
+# 
+#%{__cp} %{SOURCE8} firmware/bnx2/
+#%{__cp} %{SOURCE9} firmware/bnx2x/
+#pushd firmware/bnx2/ > /dev/null
+#tar xvzf $(basename %{SOURCE8})
+#for fwfile in $(ls *.fw)
+#  do
+#    objcopy -O ihex -I binary $fwfile $fwfile.ihex
+#  done
+#popd > /dev/null
+#pushd firmware/bnx2x/ > /dev/null
+#tar xvzf $(basename %{SOURCE9})
+#for fwfile in $(ls *.fw)
+#  do
+#    objcopy -O ihex -I binary $fwfile $fwfile.ihex
+#  done
+#popd > /dev/null
 
 #roll in patches
+%patch10000 -p1
 %patch10001 -p1
 %patch10002 -p1
 %patch10003 -p1
-%patch10004 -p1
-%patch10005 -p1
-%patch10006 -p1
-%patch10007 -p1
-%patch10008 -p1
-%patch10009 -p1
-%patch10010 -p1
-%patch10012 -p1
-%patch10014 -p1
-%patch10015 -p1
 
 popd > /dev/null
 
@@ -587,8 +566,9 @@ man9dir=$RPM_BUILD_ROOT%{_datadir}/man/man9
 
 # Install the man pages for the kernel API.
 %{__mkdir_p} $man9dir
-find Documentation/DocBook/man -name '*.9.gz' -print0 \
-  | xargs -0 --no-run-if-empty %{__install} -m 444 -t $man9dir
+for file in $(find Documentation/DocBook/man -name '*.9.gz' | sort | uniq); do
+%{__cp} -af $file $man9dir/
+done
 %endif
 
 %if %{with_headers}
@@ -841,9 +821,29 @@ fi
 %dir %{_libexecdir}/perf-core
 %{_libexecdir}/perf-core/*
 %{_mandir}/man[1-8]/*
+/usr/share/doc/perf-tip/tips.txt
 %endif
 
 %changelog
+* Tue Apr 18 2017 Johnny Hughes <johnny@centos.org> 4.9.23-26
+- upgrade to upstream 4.9.23 LTS
+
+* Tue Apr  4 2017 Johnny Hughes <johnny@centos.org> 4.9.20-26
+- modified NETFILTER and BRIDGE configs using fedora kernel
+
+* Fri Mar 31 2017 Johnny Hughes <johnny@centos.org> 4.9.20-25
+- upgraded to the upstream 4.9.20 LTS kernel
+
+* Wed Mar 15 2017 Johnny Hughes <johnny@centos.org> 4.9.15-22
+- Upgrade to upstream LTS 4.9.15 kernel
+
+* Mon Feb 20 2017 Johnny Hughes <johnny@centos.org> 4.9.13-22
+- rebase to upstream LTS 4.9.13 kernel, add back in blktap2 support
+ 
+* Sun Feb 19 2017 Johnny Hughes <johnny@centos.org>  4.4.50-21
+- upgrade to upstream LTS 4.4.50 kernel
+- remove blktap2 support
+
 * Tue Oct 25 2016 Johnny Hughes <johnny@centos.org>  3.18.44-20
 - Upgrade to upstream 3.18.44
 - CVE-2016-5195 (Dirty COW) fix 
