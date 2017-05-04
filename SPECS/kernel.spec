@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.23 
+%define LKAver 4.9.25 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -91,7 +91,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 26%{?buildid}%{?dist}
+%define pkg_release 27%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -185,7 +185,7 @@ Source3: config-x86_64
 
 Patch10000: blktap2.patch
 Patch10001: export-for-xenfb2.patch
-Patch10002: xen-apic-id-fix.patch
+#Patch10002: xen-apic-id-fix.patch
 Patch10003: xen-nested-dom0-fix.patch
 
 %description
@@ -334,7 +334,7 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 #roll in patches
 %patch10000 -p1
 %patch10001 -p1
-%patch10002 -p1
+#%patch10002 -p1
 %patch10003 -p1
 
 popd > /dev/null
@@ -825,6 +825,10 @@ fi
 %endif
 
 %changelog
+* Wed May  3 2017 Johnny Hughes <johnny@centos.org> 4.9.25-27
+- Upgraded to LTS 4.9.25, removed patch 10002 as it is now 
+  in the upstream kernel.
+
 * Tue Apr 18 2017 Johnny Hughes <johnny@centos.org> 4.9.23-26
 - upgrade to upstream 4.9.23 LTS
 
