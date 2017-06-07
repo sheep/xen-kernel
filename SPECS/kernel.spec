@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.25 
+%define LKAver 4.9.31 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -825,6 +825,9 @@ fi
 %endif
 
 %changelog
+* Wed Jun  7 2017 Johnny Hughes <johnny@centos.org> 4.9.31-27
+- Upgraded to LTS 4.9.31
+
 * Wed May  3 2017 Johnny Hughes <johnny@centos.org> 4.9.25-27
 - Upgraded to LTS 4.9.25, removed patch 10002 as it is now 
   in the upstream kernel.
