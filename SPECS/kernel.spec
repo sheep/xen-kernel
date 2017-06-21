@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.44
+%define LKAver 3.18.57
 
 # Define the buildid, if required.
 #define buildid .1
@@ -205,6 +205,12 @@ Patch10012: 0012-xen-pciback-Return-error-on-XEN_PCI_OP_enable_msi-wh.patch
 Patch10014: 0014-xen-pciback-Do-not-install-an-IRQ-handler-for-MSI-in.patch
 Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
 
+#XSA-216
+Patch10020: 0020-xen-blkback-dont_leak_stack_data_via_response_ring.patch
+
+#Netback patch
+Patch10021: 0021-xen-netback-correctly_schedule_rate-limited_queues.patch
+
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
 Linux-based operating system. The kernel handles the basic functions
@@ -357,6 +363,8 @@ popd > /dev/null
 %patch10012 -p1
 %patch10014 -p1
 %patch10015 -p1
+%patch10020 -p1
+%patch10021 -p1
 
 popd > /dev/null
 
@@ -844,6 +852,11 @@ fi
 %endif
 
 %changelog
+* Wed Jun 21 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.57-20
+- upgrade to upstream 3.18.57 kernel
+- Fix XSA-216
+- Add patch to fix high ksoftirqd usage when using rate-limiting
+
 * Tue Oct 25 2016 Johnny Hughes <johnny@centos.org>  3.18.44-20
 - Upgrade to upstream 3.18.44
 - CVE-2016-5195 (Dirty COW) fix 
