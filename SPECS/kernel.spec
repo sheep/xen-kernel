@@ -33,6 +33,13 @@
 %define with_vdso_install %{?_without_vdso_install: 0} %{?!_without_vdso_install: 1}
 # use dracut instead of mkinitrd
 %define with_dracut       %{?_without_dracut:       0} %{?!_without_dracut:       1}
+# kernel-debuginfo
+%define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 1}
+
+%if !%{with_debuginfo}
+%define _enable_debug_packages 0
+%endif
+%define debuginfodir /usr/lib/debug
 
 # Build only the kernel-doc & kernel-firmware packages.
 %ifarch noarch
@@ -43,6 +50,7 @@
 %define with_vdso_install 0
 %if "%{rhel}" == "7"
 %define with_firmware 0
+%define with_debuginfo 0
 %endif
 %endif
 
@@ -93,7 +101,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 20%{?buildid}%{?dist}
+%define pkg_release 21%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -172,6 +180,7 @@ BuildRequires: xmlto, asciidoc, bc
 %if %{with_perf}
 BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel, numactl-devel
 BuildRequires: python-devel perl(ExtUtils::Embed) gtk2-devel bison 
+BuildRequires: elfutils-devel systemtap-sdt-devel audit-libs-devel
 %endif
 BuildRequires: python
 
@@ -323,6 +332,14 @@ Provides: perl(Perf::Trace::Util) = 0.01
 This package provides the perf tool and the supporting documentation.
 %endif
 
+%if %{with_debuginfo}
+%package debuginfo
+Summary: Kernel source files used by %{name}-debuginfo packages
+Group: Development/Debug
+%description debuginfo
+This package provides debug information for kernel-%{version}-%{release}.
+%endif
+
 # Disable the building of the debug package(s).
 %define debug_package %{nil}
 
@@ -369,6 +386,17 @@ popd > /dev/null
 popd > /dev/null
 
 %build
+%if %{with_debuginfo}
+# This override tweaks the kernel makefiles so that we run debugedit on an
+# object before embedding it.  When we later run find-debuginfo.sh, it will
+# run debugedit again.  The edits it does change the build ID bits embedded
+# in the stripped object, but repeating debugedit is a no-op.  We do it
+# beforehand to get the proper final build ID bits into the embedded image.
+# This affects the vDSO images in vmlinux, and the vmlinux image in bzImage.
+export AFTER_LINK=\
+'sh -xc "/usr/lib/rpm/debugedit -b $$RPM_BUILD_DIR -d /usr/src/debug -i $@"'
+%endif
+
 BuildKernel() {
     Flavour=$1
 
@@ -390,6 +418,11 @@ BuildKernel() {
     %{__make} -s CONFIG_DEBUG_SECTION_MISMATCH=y ARCH=%{buildarch} V=1 %{?_smp_mflags} modules
 
     # Install the results into the RPM_BUILD_ROOT directory.
+%if %{with_debuginfo}
+    mkdir -p $RPM_BUILD_ROOT%{debuginfodir}/boot
+    install -m 644 System.map $RPM_BUILD_ROOT/%{debuginfodir}/boot/System.map-%{KVRFA}
+%endif
+
     %{__mkdir_p} $RPM_BUILD_ROOT/boot
     %{__install} -m 644 .config $RPM_BUILD_ROOT/boot/config-%{KVRFA}
     %{__install} -m 644 System.map $RPM_BUILD_ROOT/boot/System.map-%{KVRFA}
@@ -498,6 +531,14 @@ hwcap 1 nosegneg"
     touch -r $RPM_BUILD_ROOT/lib/modules/%{KVRFA}/build/Makefile $RPM_BUILD_ROOT/lib/modules/%{KVRFA}/build/include/generated/autoconf.h
     touch -r $RPM_BUILD_ROOT/lib/modules/%{KVRFA}/build/Makefile $RPM_BUILD_ROOT/lib/modules/%{KVRFA}/build/include/generated/uapi/linux/version.h
 
+    #
+    # save the vmlinux file for kernel debugging into the kernel-debuginfo rpm
+    #
+%if %{with_debuginfo}
+    mkdir -p $RPM_BUILD_ROOT%{debuginfodir}/lib/modules/%{KVRFA}
+    cp vmlinux $RPM_BUILD_ROOT%{debuginfodir}/lib/modules/%{KVRFA}
+%endif
+
     # Remove any 'left-over' .cmd files.
     /usr/bin/find $RPM_BUILD_ROOT/lib/modules/%{KVRFA}/build/ -type f -name "*.cmd" | xargs --no-run-if-empty %{__rm} -f
 
@@ -581,6 +622,20 @@ find Documentation -type d | xargs %{__chmod} u+w
 %endif
 
 popd > /dev/null
+
+%if %{with_debuginfo}
+
+%define __debug_install_post \
+  /usr/lib/rpm/find-debuginfo.sh --strict-build-id %{_builddir}/%{?buildsubdir}\
+%{nil}
+
+%ifnarch noarch
+%global __debug_package 1
+%files -f debugfiles.list debuginfo
+%defattr(-,root,root)
+%endif
+
+%endif
 
 %install
 pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
@@ -849,11 +904,13 @@ fi
 %dir %{_libexecdir}/perf-core
 %{_libexecdir}/perf-core/*
 %{_mandir}/man[1-8]/*
+/usr/share/perf-core/strace/groups/file
 %endif
 
 %changelog
-* Wed Jun 21 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.57-20
+* Wed Jun 21 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.57-21
 - upgrade to upstream 3.18.57 kernel
+- Add debuginfo package
 - Fix XSA-216
 - Add patch to fix high ksoftirqd usage when using rate-limiting
 
