@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.31 
+%define LKAver 4.9.33 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -186,7 +186,8 @@ Source3: config-x86_64
 Patch10000: blktap2.patch
 Patch10001: export-for-xenfb2.patch
 #Patch10002: xen-apic-id-fix.patch
-Patch10003: xen-nested-dom0-fix.patch
+#Patch10003: xen-nested-dom0-fix.patch
+Patch10004: xsa216-linux-4.11.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -335,7 +336,8 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 %patch10000 -p1
 %patch10001 -p1
 #%patch10002 -p1
-%patch10003 -p1
+#%patch10003 -p1
+%patch10004 -p1
 
 popd > /dev/null
 
@@ -826,7 +828,8 @@ fi
 
 %changelog
 * Wed Jun  7 2017 Johnny Hughes <johnny@centos.org> 4.9.31-27
-- Upgraded to LTS 4.9.31
+- Upgraded to LTS 4.9.31, removed patch 10003 as it is now
+  in the upstream kernel.
 
 * Wed May  3 2017 Johnny Hughes <johnny@centos.org> 4.9.25-27
 - Upgraded to LTS 4.9.25, removed patch 10002 as it is now 
