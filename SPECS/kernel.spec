@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.33 
+%define LKAver 4.9.34 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -884,7 +884,10 @@ fi
 %endif
 
 %changelog
-* Wed Jun 15 2017 Sarah Newman <srn@prgmr.com> 4.9.31-28
+* Sun Jun 25 2017 Johnny Hughes <johnny@centos.org> 4.9.34-28
+- Upgraded to upstream 4.9.34
+
+* Thu Jun 15 2017 Sarah Newman <srn@prgmr.com> 4.9.31-28
 - Add debuginfo package
 - Enable additional features during with-perf
 - Apply XSA-216
