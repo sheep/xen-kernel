@@ -99,7 +99,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 28%{?buildid}%{?dist}
+%define pkg_release 29%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -197,6 +197,7 @@ Patch10001: export-for-xenfb2.patch
 #Patch10002: xen-apic-id-fix.patch
 #Patch10003: xen-nested-dom0-fix.patch
 Patch10004: xsa216-linux-4.11.patch
+Patch10005: xen-netback-correctly_schedule_rate-limited_queues.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -355,6 +356,7 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 #%patch10002 -p1
 #%patch10003 -p1
 %patch10004 -p1
+%patch10005 -p1
 
 popd > /dev/null
 
@@ -884,6 +886,9 @@ fi
 %endif
 
 %changelog
+* Tue Jun 27 2017 Jean-Louis Dupond <jean-louis@dupond.be> 4.9.34-29
+- Add xen-netback patch to fix lockup with rate-limiting
+
 * Sun Jun 25 2017 Johnny Hughes <johnny@centos.org> 4.9.34-28
 - Upgraded to upstream 4.9.34
 
