@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.34 
+%define LKAver 4.9.37 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -196,7 +196,7 @@ Patch10000: blktap2.patch
 Patch10001: export-for-xenfb2.patch
 #Patch10002: xen-apic-id-fix.patch
 #Patch10003: xen-nested-dom0-fix.patch
-Patch10004: xsa216-linux-4.11.patch
+#Patch10004: xsa216-linux-4.11.patch
 Patch10005: xen-netback-correctly_schedule_rate-limited_queues.patch
 
 %description
@@ -355,7 +355,7 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 %patch10001 -p1
 #%patch10002 -p1
 #%patch10003 -p1
-%patch10004 -p1
+#%patch10004 -p1
 %patch10005 -p1
 
 popd > /dev/null
@@ -886,6 +886,12 @@ fi
 %endif
 
 %changelog
+* Thu Jul 13 2017 Johnny Hughes <johnny@centos.org> 4.9.37-29
+- Upgraded to upstream 4.9.37
+- Remove patch 10004, rolled in upstream
+- Modified x86_64 config to disable CONFIG_IO_STRICT_DEVMEM as it is
+  causing issues with some iscsi configs
+
 * Tue Jun 27 2017 Jean-Louis Dupond <jean-louis@dupond.be> 4.9.34-29
 - Add xen-netback patch to fix lockup with rate-limiting
 
