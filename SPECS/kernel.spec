@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.37 
+%define LKAver 4.9.39 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -886,6 +886,11 @@ fi
 %endif
 
 %changelog
+* Fri Jul 21 2017 Johnny Hughes <johnny@centos.org> 4.9.39-29
+- Upgraded to upstream 4.9.39
+- Switch from CONFIG_SLUB to CONFIG_SLAB to resolve some xen hypervisor
+  related memory errors.
+
 * Thu Jul 13 2017 Johnny Hughes <johnny@centos.org> 4.9.37-29
 - Upgraded to upstream 4.9.37
 - Remove patch 10004, rolled in upstream
