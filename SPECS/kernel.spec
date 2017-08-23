@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.39 
+%define LKAver 4.9.44 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -197,7 +197,8 @@ Patch10001: export-for-xenfb2.patch
 #Patch10002: xen-apic-id-fix.patch
 #Patch10003: xen-nested-dom0-fix.patch
 #Patch10004: xsa216-linux-4.11.patch
-Patch10005: xen-netback-correctly_schedule_rate-limited_queues.patch
+#Patch10005: xen-netback-correctly_schedule_rate-limited_queues.patch
+Patch10006: xsa229.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -356,7 +357,8 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 #%patch10002 -p1
 #%patch10003 -p1
 #%patch10004 -p1
-%patch10005 -p1
+#%patch10005 -p1
+%patch10006 -p1
 
 popd > /dev/null
 
@@ -886,6 +888,11 @@ fi
 %endif
 
 %changelog
+* Wed Aug 23 2017 Kevin Stange <kevin@steadfast.net> 4.9.44-29
+- Upgraded to upstream 4.9.44
+- Remove patch 10005, rolled in upstream
+- Apply XSA-229
+
 * Fri Jul 21 2017 Johnny Hughes <johnny@centos.org> 4.9.39-29
 - Upgraded to upstream 4.9.39
 - Switch from CONFIG_SLUB to CONFIG_SLAB to resolve some xen hypervisor
