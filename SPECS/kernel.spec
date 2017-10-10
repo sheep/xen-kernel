@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.48 
+%define LKAver 4.9.54 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -890,6 +890,9 @@ fi
 %endif
 
 %changelog
+* Tue Oct 10 2017 Johnny Hughes <johnny@centos.org> 4.9.54-29
+- Upgraded to upstream 4.9.54
+
 * Fri Sep  8 2017 Johnny Hughes <johnny@centos.org> 4.9.48-29
 - Upgraded to upstream 4.9.48
 - Added Destroy-ldisc-instance-hangup.patch
