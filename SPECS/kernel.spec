@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.54 
+%define LKAver 4.9.58 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -185,7 +185,7 @@ BuildRequires: python openssl-devel
 BuildConflicts: rhbuildsys(DiskFree) < 7Gb
 
 # Sources.
-Source0: ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-%{LKAver}.tar.xz
+Source0: ftp://ftp.kernel.org/pub/linux/kernel/v4.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
 Source2: config-i686-NONPAE
 Source3: config-x86_64
@@ -605,9 +605,16 @@ popd > /dev/null
 
 %if %{with_debuginfo}
 
+%if "%{rhel}" == "6"
+%define __debug_install_post \
+  /usr/lib/rpm/find-debuginfo.sh --strict-build-id %{_builddir}/%{?buildsubdir}\
+  %{__cp} %{_builddir}/%{?buildsubdir}/linux-%{version}-%{release}.%{_target_cpu}/tools/perf/perf $RPM_BUILD_ROOT/usr/bin/\
+%{nil}
+%else
 %define __debug_install_post \
   /usr/lib/rpm/find-debuginfo.sh --strict-build-id %{_builddir}/%{?buildsubdir}\
 %{nil}
+%endif
 
 %ifnarch noarch
 %global __debug_package 1
@@ -667,6 +674,8 @@ find $RPM_BUILD_ROOT/usr/include \
 %if %{with_perf}
 # perf tool binary and supporting scripts/binaries.
 %{perf_make} DESTDIR=$RPM_BUILD_ROOT install
+# remove the 'trace' symlink.
+rm -f $RPM_BUILD_ROOT/%{_bindir}/trace
 
 # perf man pages. (Note: implicit rpm magic compresses them later.)
 %{perf_make} DESTDIR=$RPM_BUILD_ROOT install-man || false
@@ -878,7 +887,6 @@ fi
 %defattr(-,root,root)
 /etc/bash_completion.d/perf
 %{_bindir}/perf
-%{_bindir}/trace
 %{_libdir}/libperf-gtk.so
 %dir %{_libdir}/traceevent/plugins
 %{_libdir}/traceevent/plugins/*
@@ -890,6 +898,10 @@ fi
 %endif
 
 %changelog
+* Wed Oct 18 2017 Akemi Yagi <toracat@centos.org> 4.9.57-29
+- Upgraded to upstream 4.9.58
+- Fixed perf build issue (https://bugs.centos.org/view.php?id=13940)
+
 * Tue Oct 10 2017 Johnny Hughes <johnny@centos.org> 4.9.54-29
 - Upgraded to upstream 4.9.54
 
