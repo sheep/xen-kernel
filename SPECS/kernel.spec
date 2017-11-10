@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.57
+%define LKAver 3.18.80
 
 # Define the buildid, if required.
 #define buildid .1
@@ -187,7 +187,7 @@ BuildRequires: python
 BuildConflicts: rhbuildsys(DiskFree) < 7Gb
 
 # Sources.
-Source0: ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-%{LKAver}.tar.xz
+Source0: https://www.kernel.org/pub/linux/kernel/v3.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
 Source3: config-x86_64
 Source8: 3.18.17-bnx2-firmware.tgz
@@ -216,9 +216,6 @@ Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
 
 #XSA-216
 Patch10020: 0020-xen-blkback-dont_leak_stack_data_via_response_ring.patch
-
-#Netback patch
-Patch10021: 0021-xen-netback-correctly_schedule_rate-limited_queues.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -381,7 +378,6 @@ popd > /dev/null
 %patch10014 -p1
 %patch10015 -p1
 %patch10020 -p1
-%patch10021 -p1
 
 popd > /dev/null
 
@@ -908,6 +904,10 @@ fi
 %endif
 
 %changelog
+* Mon Sep 18 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.71-21
+- upgrade to upstream 3.18.71 kernel
+- Remove rate-limiting patch as its included upstream
+
 * Wed Jun 21 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.57-21
 - upgrade to upstream 3.18.57 kernel
 - Add debuginfo package
