@@ -101,7 +101,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 21%{?buildid}%{?dist}
+%define pkg_release 22%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -180,7 +180,7 @@ BuildRequires: xmlto, asciidoc, bc
 %if %{with_perf}
 BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel, numactl-devel
 BuildRequires: python-devel perl(ExtUtils::Embed) gtk2-devel bison 
-BuildRequires: elfutils-devel systemtap-sdt-devel audit-libs-devel
+BuildRequires: elfutils-devel libunwind-devel systemtap-sdt-devel audit-libs-devel
 %endif
 BuildRequires: python
 
@@ -900,10 +900,13 @@ fi
 %dir %{_libexecdir}/perf-core
 %{_libexecdir}/perf-core/*
 %{_mandir}/man[1-8]/*
-/usr/share/perf-core/strace/groups/file
 %endif
 
 %changelog
+* Sat Nov 11 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.80-22
+- upgrade to upstream 3.18.80 kernel
+- Fix building perf package
+
 * Mon Sep 18 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.71-21
 - upgrade to upstream 3.18.71 kernel
 - Remove rate-limiting patch as its included upstream
