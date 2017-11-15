@@ -101,7 +101,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 22%{?buildid}%{?dist}
+%define pkg_release 23%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -180,7 +180,7 @@ BuildRequires: xmlto, asciidoc, bc
 %if %{with_perf}
 BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel, numactl-devel
 BuildRequires: python-devel perl(ExtUtils::Embed) gtk2-devel bison 
-BuildRequires: elfutils-devel libunwind-devel systemtap-sdt-devel audit-libs-devel
+BuildRequires: elfutils-devel systemtap-sdt-devel audit-libs-devel
 %endif
 BuildRequires: python
 
@@ -216,6 +216,9 @@ Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
 
 #XSA-216
 Patch10020: 0020-xen-blkback-dont_leak_stack_data_via_response_ring.patch
+
+#Fix CentOS 7 Builds
+Patch10021: 0021-perf-build-fix-RHEL7.4.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -378,6 +381,7 @@ popd > /dev/null
 %patch10014 -p1
 %patch10015 -p1
 %patch10020 -p1
+%patch10021 -p1
 
 popd > /dev/null
 
@@ -611,7 +615,7 @@ find Documentation -type d | xargs %{__chmod} u+w
 
 %if %{with_perf}
 %global perf_make \
-  %{__make} -s %{?_smp_mflags} -C tools/perf V=1 HAVE_CPLUS_DEMANGLE=1 NO_DWARF=1 WERROR=0 prefix=%{_prefix}
+  %{__make} -s %{?_smp_mflags} -C tools/perf V=1 HAVE_CPLUS_DEMANGLE=1 NO_DWARF=1 NO_LIBDW_DWARF_UNWIND=1 WERROR=0 prefix=%{_prefix}
 
 %{perf_make} all
 %{perf_make} man || false
@@ -903,6 +907,10 @@ fi
 %endif
 
 %changelog
+* Wed Nov 15 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.80-23
+- Fix building perf without libunwind-devel
+- Fix building on CentOS 7
+
 * Sat Nov 11 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.80-22
 - upgrade to upstream 3.18.80 kernel
 - Fix building perf package
