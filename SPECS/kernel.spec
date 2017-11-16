@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.80
+%define LKAver 3.18.81
 
 # Define the buildid, if required.
 #define buildid .1
@@ -907,6 +907,9 @@ fi
 %endif
 
 %changelog
+* Thu Nov 16 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.81-23
+- upgrade to upstream 3.18.81 kernel
+
 * Wed Nov 15 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.80-23
 - Fix building perf without libunwind-devel
 - Fix building on CentOS 7
