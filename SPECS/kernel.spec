@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.58 
+%define LKAver 4.9.63 
 
 # Define the buildid, if required.
 #define buildid .1
@@ -898,7 +898,10 @@ fi
 %endif
 
 %changelog
-* Wed Oct 18 2017 Akemi Yagi <toracat@centos.org> 4.9.57-29
+* Mon Nov 20 2017 Johnny Hughes <johnny@centos.org> 4.9.63-29
+- Upgraded to upstream 4.9.63
+
+* Wed Oct 18 2017 Akemi Yagi <toracat@centos.org> 4.9.58-29
 - Upgraded to upstream 4.9.58
 - Fixed perf build issue (https://bugs.centos.org/view.php?id=13940)
 
