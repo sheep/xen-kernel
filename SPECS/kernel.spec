@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 3.18.80
+%define LKAver 3.18.81
 
 # Define the buildid, if required.
 #define buildid .1
@@ -101,7 +101,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 22%{?buildid}%{?dist}
+%define pkg_release 24%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -180,7 +180,7 @@ BuildRequires: xmlto, asciidoc, bc
 %if %{with_perf}
 BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel, numactl-devel
 BuildRequires: python-devel perl(ExtUtils::Embed) gtk2-devel bison 
-BuildRequires: elfutils-devel libunwind-devel systemtap-sdt-devel audit-libs-devel
+BuildRequires: elfutils-devel systemtap-sdt-devel audit-libs-devel
 %endif
 BuildRequires: python
 
@@ -190,8 +190,6 @@ BuildConflicts: rhbuildsys(DiskFree) < 7Gb
 Source0: https://www.kernel.org/pub/linux/kernel/v3.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
 Source3: config-x86_64
-Source8: 3.18.17-bnx2-firmware.tgz
-Source9: 3.18.17-bnx2x-firmware.tgz
 
 #Patches
 
@@ -199,7 +197,6 @@ Source9: 3.18.17-bnx2x-firmware.tgz
 Patch10001: 0001-block-blktap-add-blktap-driver.patch
 Patch10002: 0002-Add-blktap-Kconfig.patch
 Patch10003: 0003-Add-blktap-makefile.patch
-Patch10004: 0004-Wire-in-missing-bnx2-firmware.patch
 
 #XSA155 allowed for public cloud operators
 Patch10005: 0005-xen-Add-RING_COPY_REQUEST-XSA155.patch
@@ -216,6 +213,9 @@ Patch10015: 0015-xen-pciback-For-XEN_PCI_OP_disable_msi-x-only-disabl.patch
 
 #XSA-216
 Patch10020: 0020-xen-blkback-dont_leak_stack_data_via_response_ring.patch
+
+#Fix CentOS 7 Builds
+Patch10021: 0021-perf-build-fix-RHEL7.4.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -346,28 +346,11 @@ This package provides debug information for kernel-%{version}-%{release}.
 pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 %{__cp} %{SOURCE1} .
 %{__cp} %{SOURCE3} .
-%{__cp} %{SOURCE8} firmware/bnx2/
-%{__cp} %{SOURCE9} firmware/bnx2x/
-pushd firmware/bnx2/ > /dev/null
-tar xvzf $(basename %{SOURCE8})
-for fwfile in $(ls *.fw)
-  do
-    objcopy -O ihex -I binary $fwfile $fwfile.ihex
-  done
-popd > /dev/null
-pushd firmware/bnx2x/ > /dev/null
-tar xvzf $(basename %{SOURCE9})
-for fwfile in $(ls *.fw)
-  do
-    objcopy -O ihex -I binary $fwfile $fwfile.ihex
-  done
-popd > /dev/null
 
 #roll in patches
 %patch10001 -p1
 %patch10002 -p1
 %patch10003 -p1
-%patch10004 -p1
 %patch10005 -p1
 %patch10006 -p1
 %patch10007 -p1
@@ -378,6 +361,7 @@ popd > /dev/null
 %patch10014 -p1
 %patch10015 -p1
 %patch10020 -p1
+%patch10021 -p1
 
 popd > /dev/null
 
@@ -611,7 +595,7 @@ find Documentation -type d | xargs %{__chmod} u+w
 
 %if %{with_perf}
 %global perf_make \
-  %{__make} -s %{?_smp_mflags} -C tools/perf V=1 HAVE_CPLUS_DEMANGLE=1 NO_DWARF=1 WERROR=0 prefix=%{_prefix}
+  %{__make} -s %{?_smp_mflags} -C tools/perf V=1 HAVE_CPLUS_DEMANGLE=1 NO_DWARF=1 NO_LIBDW_DWARF_UNWIND=1 WERROR=0 prefix=%{_prefix}
 
 %{perf_make} all
 %{perf_make} man || false
@@ -903,6 +887,16 @@ fi
 %endif
 
 %changelog
+* Fri Nov 17 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.81-24
+- remove bnx2 & bnx2x patches
+
+* Thu Nov 16 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.81-23
+- upgrade to upstream 3.18.81 kernel
+
+* Wed Nov 15 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.80-23
+- Fix building perf without libunwind-devel
+- Fix building on CentOS 7
+
 * Sat Nov 11 2017 Jean-Louis Dupond <jean-louis@dupond.be> 3.18.80-22
 - upgrade to upstream 3.18.80 kernel
 - Fix building perf package
