@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.77
+%define LKAver 4.9.86
 
 # Define the buildid, if required.
 #define buildid .1
@@ -900,6 +900,10 @@ fi
 %endif
 
 %changelog
+* Mon Mar 05 2018 Johnny Hughes <johnny@centos.org> 4.9.86-30
+- Upgraded to upstream 4.9.86
+- Set new config option (for x86_64 only) BPF_JIT_ALWAYS_ON to YES
+
 * Thu Jan 18 2018 Johnny Hughes <johnny@centos.org> 4.9.77-30
 - Upgraded to upstream 4.9.77
 
