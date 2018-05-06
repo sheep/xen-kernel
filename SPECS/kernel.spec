@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.97
+%define LKAver 4.9.98
 
 # Define the buildid, if required.
 #define buildid .1
@@ -900,6 +900,9 @@ fi
 %endif
 
 %changelog
+* Fri May 4 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.98-30
+- Upgraded to upstream 4.9.98
+
 * Sun Apr 29 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.97-30
 - Upgraded to upstream 4.9.97
 
