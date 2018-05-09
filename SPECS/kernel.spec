@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.98
+%define LKAver 4.9.99
 
 # Define the buildid, if required.
 #define buildid .1
@@ -99,7 +99,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 30%{?buildid}%{?dist}
+%define pkg_release 31%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -174,6 +174,9 @@ BuildRequires: bzip2, findutils, gzip, m4, perl, make >= 3.78, diffutils, gawk
 BuildRequires: gcc >= 3.4.2, binutils >= 2.12, redhat-rpm-config
 BuildRequires: net-tools, patchutils, rpm-build >= 4.8.0-7
 BuildRequires: xmlto, asciidoc, bc
+%if "%{rhel}" == "7"
+BuildRequires: hostname
+%endif
 %if %{with_perf}
 BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel, numactl-devel
 BuildRequires: python-devel perl(ExtUtils::Embed) gtk2-devel bison 
@@ -900,6 +903,10 @@ fi
 %endif
 
 %changelog
+* Wed May 9 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.99-31
+- Upgraded to upstream 4.9.99
+- Fix build error on el7 mkcompile_h: hostname: command not found
+
 * Fri May 4 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.98-30
 - Upgraded to upstream 4.9.98
 
@@ -916,7 +923,7 @@ fi
 * Fri Jan  5 2018 Johnny Hughes <johnny@centos.org> 4.9.75-30
 - Upgraded to upstream 4.9.75
 - Remove Destroy-ldisc-instance-hangup.patch
-- Allow for differnt c6 and c7 config files for x86_64 arch
+- Allow for different c6 and c7 config files for x86_64 arch
  
 * Tue Dec 19 2017 Johnny Hughes <johnny@centos.org> 4.9.70-29
 - Upgraded to upstream 4.9.70
