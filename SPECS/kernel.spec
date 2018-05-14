@@ -191,7 +191,6 @@ Source0: ftp://ftp.kernel.org/pub/linux/kernel/v4.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
 Source2: config-i686-NONPAE
 Source3: config-x86_64
-Source4: config-x86_64-c6
 
 #Patches
 
@@ -334,9 +333,6 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 %{__cp} %{SOURCE1} .
 %{__cp} %{SOURCE2} .
 %{__cp} %{SOURCE3} .
-%if "%{rhel}" == "6"
-%{__cp} -f %{SOURCE4} ./config-x86_64  
-%endif 
 # to change firmware in the kernel
 # now using linux-firmware package
 # 
