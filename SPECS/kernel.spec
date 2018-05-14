@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.63 
+%define LKAver 4.9.99
 
 # Define the buildid, if required.
 #define buildid .1
@@ -99,7 +99,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 29%{?buildid}%{?dist}
+%define pkg_release 31%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -166,7 +166,6 @@ Conflicts: %{kernel_headers_conflicts}
 # isn't required for the kernel proper to function.
 AutoReq: no
 AutoProv: yes
-
 #
 # List the packages used during the kernel build.
 #
@@ -175,6 +174,9 @@ BuildRequires: bzip2, findutils, gzip, m4, perl, make >= 3.78, diffutils, gawk
 BuildRequires: gcc >= 3.4.2, binutils >= 2.12, redhat-rpm-config
 BuildRequires: net-tools, patchutils, rpm-build >= 4.8.0-7
 BuildRequires: xmlto, asciidoc, bc
+%if "%{rhel}" == "7"
+BuildRequires: hostname
+%endif
 %if %{with_perf}
 BuildRequires: elfutils-libelf-devel zlib-devel binutils-devel newt-devel, numactl-devel
 BuildRequires: python-devel perl(ExtUtils::Embed) gtk2-devel bison 
@@ -189,6 +191,7 @@ Source0: ftp://ftp.kernel.org/pub/linux/kernel/v4.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
 Source2: config-i686-NONPAE
 Source3: config-x86_64
+Source4: config-x86_64-c6
 
 #Patches
 
@@ -199,7 +202,7 @@ Patch10001: export-for-xenfb2.patch
 #Patch10004: xsa216-linux-4.11.patch
 #Patch10005: xen-netback-correctly_schedule_rate-limited_queues.patch
 #Patch10006: xsa229.patch
-Patch10007: Destroy-ldisc-instance-hangup.patch
+#Patch10007: Destroy-ldisc-instance-hangup.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -331,7 +334,9 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 %{__cp} %{SOURCE1} .
 %{__cp} %{SOURCE2} .
 %{__cp} %{SOURCE3} .
-
+%if "%{rhel}" == "6"
+%{__cp} -f %{SOURCE4} ./config-x86_64  
+%endif 
 # to change firmware in the kernel
 # now using linux-firmware package
 # 
@@ -360,7 +365,7 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 #%patch10004 -p1
 #%patch10005 -p1
 #%patch10006 -p1
-%patch10007 -p1
+#%patch10007 -p1
 
 popd > /dev/null
 
@@ -898,6 +903,31 @@ fi
 %endif
 
 %changelog
+* Wed May 9 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.99-31
+- Upgraded to upstream 4.9.99
+- Fix build error on el7 mkcompile_h: hostname: command not found
+
+* Fri May 4 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.98-30
+- Upgraded to upstream 4.9.98
+
+* Sun Apr 29 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.97-30
+- Upgraded to upstream 4.9.97
+
+* Mon Mar 05 2018 Johnny Hughes <johnny@centos.org> 4.9.86-30
+- Upgraded to upstream 4.9.86
+- Set new config option (for x86_64 only) BPF_JIT_ALWAYS_ON to YES
+
+* Thu Jan 18 2018 Johnny Hughes <johnny@centos.org> 4.9.77-30
+- Upgraded to upstream 4.9.77
+
+* Fri Jan  5 2018 Johnny Hughes <johnny@centos.org> 4.9.75-30
+- Upgraded to upstream 4.9.75
+- Remove Destroy-ldisc-instance-hangup.patch
+- Allow for different c6 and c7 config files for x86_64 arch
+ 
+* Tue Dec 19 2017 Johnny Hughes <johnny@centos.org> 4.9.70-29
+- Upgraded to upstream 4.9.70
+
 * Mon Nov 20 2017 Johnny Hughes <johnny@centos.org> 4.9.63-29
 - Upgraded to upstream 4.9.63
 
