@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.99
+%define LKAver 4.9.105
 
 # Define the buildid, if required.
 #define buildid .1
@@ -99,7 +99,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 31%{?buildid}%{?dist}
+%define pkg_release 32%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -173,7 +173,7 @@ BuildRequires: module-init-tools, patch >= 2.5.4, bash >= 2.03, sh-utils, tar
 BuildRequires: bzip2, findutils, gzip, m4, perl, make >= 3.78, diffutils, gawk
 BuildRequires: gcc >= 3.4.2, binutils >= 2.12, redhat-rpm-config
 BuildRequires: net-tools, patchutils, rpm-build >= 4.8.0-7
-BuildRequires: xmlto, asciidoc, bc
+BuildRequires: xmlto, asciidoc, bc, xz-devel
 %if "%{rhel}" == "7"
 BuildRequires: hostname
 %endif
@@ -899,6 +899,10 @@ fi
 %endif
 
 %changelog
+* Thu May 31 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.105-32
+- Bump to 4.9.105
+- Enable lzma as auto-detecting system features
+
 * Wed May 9 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.99-31
 - Upgraded to upstream 4.9.99
 - Fix build error on el7 mkcompile_h: hostname: command not found
