@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.105
+%define LKAver 4.9.112
 
 # Define the buildid, if required.
 #define buildid .1
@@ -899,8 +899,11 @@ fi
 %endif
 
 %changelog
+* Wed Jul 11 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.112-32
+- Upgraded to 4.9.112
+
 * Thu May 31 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.105-32
-- Bump to 4.9.105
+- Upgraded to 4.9.105
 - Enable lzma as auto-detecting system features
 
 * Wed May 9 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.99-31
