@@ -196,12 +196,6 @@ Source3: config-x86_64
 
 Patch10000: blktap2.patch
 Patch10001: export-for-xenfb2.patch
-#Patch10002: xen-apic-id-fix.patch
-#Patch10003: xen-nested-dom0-fix.patch
-#Patch10004: xsa216-linux-4.11.patch
-#Patch10005: xen-netback-correctly_schedule_rate-limited_queues.patch
-#Patch10006: xsa229.patch
-#Patch10007: Destroy-ldisc-instance-hangup.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -356,12 +350,6 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 #roll in patches
 %patch10000 -p1
 %patch10001 -p1
-#%patch10002 -p1
-#%patch10003 -p1
-#%patch10004 -p1
-#%patch10005 -p1
-#%patch10006 -p1
-#%patch10007 -p1
 
 popd > /dev/null
 
