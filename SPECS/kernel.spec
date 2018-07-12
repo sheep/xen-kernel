@@ -187,7 +187,7 @@ BuildRequires: python openssl-devel
 BuildConflicts: rhbuildsys(DiskFree) < 7Gb
 
 # Sources.
-Source0: ftp://ftp.kernel.org/pub/linux/kernel/v4.x/linux-%{LKAver}.tar.xz
+Source0: https://www.kernel.org/pub/linux/kernel/v4.x/linux-%{LKAver}.tar.xz
 Source1: config-i686
 Source2: config-i686-NONPAE
 Source3: config-x86_64
