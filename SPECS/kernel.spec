@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.124
+%define LKAver 4.9.127
 
 # Define the buildid, if required.
 #define buildid .1
@@ -196,6 +196,8 @@ Source3: config-x86_64
 
 Patch10000: blktap2.patch
 Patch10001: export-for-xenfb2.patch
+Patch10002: xsa270.patch
+Patch10003: tpm-Restore-functionality-to-xen-vtpm-driver.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -350,6 +352,8 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 #roll in patches
 %patch10000 -p1
 %patch10001 -p1
+%patch10002 -p1
+%patch10003 -p1
 
 popd > /dev/null
 
@@ -887,6 +891,11 @@ fi
 %endif
 
 %changelog
+* Mon Sep 17 2018 Anthony PERARD <anthony.perard@citrix.com> 4.9.127-32
+- Upgraded to 4.9.127
+- Added XSA-270
+- Added a fix for the xen vtpm driver
+
 * Fri Aug 24 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.124-32
 - Upgraded to 4.9.124
 
