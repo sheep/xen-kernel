@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.135
+%define LKAver 4.9.141
 
 # Define the buildid, if required.
 #define buildid .1
@@ -99,7 +99,7 @@
 %endif
 
 # Set pkg_release.
-%define pkg_release 32%{?buildid}%{?dist}
+%define pkg_release 34%{?buildid}%{?dist}
 
 #
 # Three sets of minimum package version requirements in the form of Conflicts.
@@ -196,7 +196,6 @@ Source3: config-x86_64
 
 Patch10000: blktap2.patch
 Patch10001: export-for-xenfb2.patch
-Patch10003: tpm-Restore-functionality-to-xen-vtpm-driver.patch
 
 %description
 This package provides the Linux kernel (vmlinuz), the core of any
@@ -351,7 +350,6 @@ pushd linux-%{version}-%{release}.%{_target_cpu} > /dev/null
 #roll in patches
 %patch10000 -p1
 %patch10001 -p1
-%patch10003 -p1
 
 popd > /dev/null
 
@@ -889,6 +887,11 @@ fi
 %endif
 
 %changelog
+* Tue Nov 27 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.141-34
+- Upgraded to 4.9.141
+- Switch CONFIG_BRIDGE and CONFIG_BRIDGE_NETFILTER from m to y
+- Remove Patch10003 tpm-Restore-functionality-to-xen-vtpm-driver, rolled in upstream since 4.9.137
+
 * Tue Oct 30 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.135-32
 - Upgraded to 4.9.135
 - Remove Patch10002 xsa270.patch, rolled in upstream since 4.9.133
