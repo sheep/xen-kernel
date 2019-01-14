@@ -8,7 +8,7 @@
 %endif
  
 # Define the version of the Linux Kernel Archive tarball.
-%define LKAver 4.9.141
+%define LKAver 4.9.150
 
 # Define the buildid, if required.
 #define buildid .1
@@ -887,6 +887,9 @@ fi
 %endif
 
 %changelog
+* Mon Jan 14 2019 Karl Johnson <karljohnson.it@gmail.com> 4.9.150-34
+- Upgraded to 4.9.150
+
 * Tue Nov 27 2018 Karl Johnson <karljohnson.it@gmail.com> 4.9.141-34
 - Upgraded to 4.9.141
 - Switch CONFIG_BRIDGE and CONFIG_BRIDGE_NETFILTER from m to y
