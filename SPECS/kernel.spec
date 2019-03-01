@@ -11,7 +11,7 @@
 %define LKAver 4.9.161
 
 # Define the buildid, if required.
-#define buildid .1
+%define buildid .1
 
 # The following build options are enabled by default.
 # Use either --without <option> on your rpmbuild command line
@@ -887,6 +887,9 @@ fi
 %endif
 
 %changelog
+* Fri Mar 01 2019 Anthony PERARD <anthony.perard@citrix.com> - 4.9.161-34.1
+- Set CONFIG_BRIDGE=m
+
 * Wed Feb 27 2019 Karl Johnson <karljohnson.it@gmail.com> 4.9.161-34
 - Upgraded to 4.9.161
 
